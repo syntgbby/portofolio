@@ -5,9 +5,11 @@
 .my-input-text {
   @apply p-2 border rounded-md bg-gray-100 focus:bg-white;
 }
-body{
+
+body {
   @apply bg-gray-100;
 }
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -21,8 +23,6 @@ body{
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-
 
 @layer utilities {
   .text-balance {

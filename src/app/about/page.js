@@ -1,7 +1,7 @@
-export default function about() {
+export default function About() {
     return (
-        <>
-        about
-        </>
-    )
+      <div>
+        tes about
+      </div>
+    );
 }
