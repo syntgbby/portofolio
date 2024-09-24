@@ -21,7 +21,7 @@ export default function Home() {
           <div className="md:w-1/2 flex flex-col justify-center items-start gap-4">
             <h1 className="text-4xl font-serif text-red-700 ">Hi,</h1>
             <h1 className="text-3xl font-serif text-white">
-              This is <br/> <span className="text-red-700">Gebby Syntia</span>'s Portfolio
+              This is <br/> <span className="text-red-700">Gebby Syntia&apos;s</span> Portfolio
             </h1>
             {/* Button to About Me */}
             <Link href="/about">
