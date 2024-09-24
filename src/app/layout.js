@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="py-2" style={{ backgroundColor: '#f7d2d3' }}>
+        <header className="py-2" style={{ backgroundColor: '#fdcfd1' }}>
           <nav className="w-full">
             <div className="max-w-5xl mx-auto px-2 md:px-6 xl:px-4">
               <div className="flex flex-wrap items-center justify-between">
