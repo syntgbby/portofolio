@@ -50,9 +50,9 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
 
         {links.map((link) => {
           return (
-            <div className='lg:block hidden'>
+            <div key={link.path} className="lg:block hidden">
+              {" "}
               <Link
-                key={link.path}
                 className={clsx(
                   "hover:border-border dark:hover:border-darkBorder rounded-base border-2 px-2 py-1 transition-colors",
                   path === link.path
@@ -68,7 +68,6 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
         })}
         <ThemeSwitcher />
       </nav>
-          
     </div>
   );
 }

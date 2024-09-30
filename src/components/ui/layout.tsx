@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Sidebar from "../sidebar";
 import Navbar from "../nav";
-function layout({ children }: { children: React.ReactNode }) {
+
+function Layout({ children }: { children: React.ReactNode }) { // Ubah 'layout' menjadi 'Layout'
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
   return (
     <div className="layout">
       <Navbar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -16,4 +18,4 @@ function layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default layout;
+export default Layout; // Ubah 'layout' menjadi 'Layout'
