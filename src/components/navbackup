@@ -1,0 +1,91 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import { Link } from "next-view-transitions";
+// import { usePathname } from "next/navigation";
+// import clsx from "clsx";
+// import { ThemeSwitcher } from "./theme-switcher";
+// import Image from "next/image";
+
+// export default function Nav() {
+//   const path = usePathname();
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const [menuHeight, setMenuHeight] = useState(0);
+
+//   useEffect(() => {
+//     if (isMenuOpen) {
+//       const navElement = document.getElementById('nav-menu');
+//       if (navElement) {
+//         setMenuHeight(navElement.scrollHeight);
+//       }
+//     } else {
+//       setMenuHeight(0);
+//     }
+//   }, [isMenuOpen]);
+
+//   const toggleMenu = () => {
+//     setIsMenuOpen(!isMenuOpen);
+//   };
+
+//   const links = [
+//     { path: "/", text: "Home" },
+//     { path: "/about", text: "About" },
+//     { path: "/work", text: "Work" },
+//     { path: "/contact", text: "Contact" },
+//   ];
+
+//   return (
+//     <div className="fixed left-0 top-5 z-50 w-full">
+//       <nav className="text-text border-border dark:border-darkBorder shadow-light dark:shadow-dark mx-auto flex flex-wrap items-center justify-between w-max gap-5 rounded-base border-2 bg-white p-2.5 px-5 text-sm font-base sm:text-base w450:gap-4">
+//         {/* Logo */}
+//         <div className="text-white font-bold text-lg">
+//           <a href="/">
+//             <Image
+//               src="/logo.png"
+//               alt="Logo"
+//               width={100}
+//               height={100}
+//               className="justify-center"
+//             />
+//           </a>
+//         </div>
+
+//         {/* Tombol burger untuk perangkat mobile */}
+//         <button className="md:hidden" onClick={toggleMenu}>
+//           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+//             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+//           </svg>
+//         </button>
+
+//         {/* Menu navigasi */}
+//         {/* <div 
+//           className={`w-full md:flex md:w-auto ${isMenuOpen ? 'block' : 'hidden'}`}
+//         > */}
+//         <div 
+//           id="nav-menu"
+//           className={`w-full md:flex md:w-auto overflow-hidden transition-all duration-300 ease-in-out`}
+//           style={{ maxHeight: isMenuOpen ? `${menuHeight}px` : '0px' }}
+//         >
+//           <div className="flex flex-col md:flex-row md:space-x-4">
+//             {links.map((link) => (
+//               <div key={link.path} className="flex justify-center items-center">
+//                 <Link
+//                   className={clsx(
+//                     "hover:border-border dark:hover:border-darkBorder rounded-base border-2 px-2 py-1 transition-colors",
+//                     path === link.path
+//                       ? "border-border dark:border-darkBorder"
+//                       : "border-transparent"
+//                   )}
+//                   href={link.path}
+//                 >
+//                   {link.text}
+//                 </Link>
+//               </div>
+//             ))}
+//             <ThemeSwitcher />
+//           </div>
+//         </div>
+//       </nav>
+//     </div>
+//   );
+// }
