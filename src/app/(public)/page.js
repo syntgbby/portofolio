@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="bg-white dark:bg-black py-10">
+    <div className="bg-white dark:bg-black-700 py-10">
       <div className="max-w-6xl mx-auto px-4 md:px-12 xl:px-4 pt-40">
         <div className="flex flex-col md:flex-row items-center justify-center">
           {/* Logo Section */}
