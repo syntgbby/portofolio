@@ -6,7 +6,6 @@ import Navbar from "@/components/nav";
 import Sidebar from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ViewTransitions } from 'next-view-transitions'
-import { Html } from "next/document";
 
 const inter = Inter({ subsets: ["latin"] });
 
