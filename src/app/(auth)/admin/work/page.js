@@ -1,9 +1,8 @@
 "use client";
-import { Switch } from "@nextui-org/react";
 import { useState } from 'react';
 import Card from '../../../../components/card';
 
-export default function Contact() {
+export default function AdminWork() {
     const [data, setData] = useState({
         title: '',
         employmentType: '',
@@ -22,43 +21,59 @@ export default function Contact() {
     ];
 
     const optLocation = [
-        { label: 'Onsite', value: 'onsite' },
-        { label: 'WFH', value: 'wfh' },
+        { label: 'Onsite', value: 'Onsite' },
+        { label: 'WFH', value: 'WFH' },
+        { label: 'Remote', value: 'Remote' },
     ];
 
     const inputHandler = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = () => {
-        // Handle form submission (e.g., send data to an API)
-        console.log(data);
-        // You can add any form submission logic here
+    const onSubmitData = async () => {
+        try {
+            let res = await fetch('/api/work', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!res.ok) {
+                // Jika respons tidak OK, lemparkan kesalahan
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            let resData = await res.json();
+            if (!resData.data) {
+                throw new Error(resData.message);
+            }
+            alert("Data berhasil ditambahkan dengan id: " + resData.data.insertedId);
+        } catch (err) {
+            console.log("ERROR", err.message);
+            alert(err.message);
+        }
     };
 
     return (
-        <div className="flex mt-20 justify-content-center">
-            <div className="md:w-4/4">
-                <div className="bg-white-800 dark:bg-black dark:text-white p-10 rounded-xl justify-content-center">
-                    <h3 className="text-2xl py-2"><b>Add Experience</b></h3>
-                    <p>*indicates required</p>
-                    <div className='mt-5 mb-5'>
-                        <div className="col-md-12 bg-sky-50 p-5 border-radius-50">
+        <>
+        <div className="flex mt-20 justify-center">
+            <div className="md:w-3/4">
+                <div className="bg-white-800 dark:bg-black dark:text-white p-5 rounded-xl justify-content-left">
+                    <h3 className="text-xl py-2"><b>Add Experience</b></h3>
+                    <p className="text-red-400">*indicates required</p>
+                    <div className="col-md-2 bg-sky-50 dark:bg-black dark:text-white p-2 border-radius-50 mt-5">
                             <div className="row">
                                 <h4><b>Notify Network</b></h4>
                                 <p>Turn on to notify your network of key profile changes (such as new job) and work anniversaries. Updates can take up to 2 hours.</p>
                                 <p>Learn more about <a href='/home' className='text-blue-500 cursor-pointer'>sharing profile changes</a></p>
                             </div>
-                            {/* Switch */}
-                            <div>
-                                {/* You can include the Switch component here if needed */}
-                            </div>
-                        </div>
                     </div>
                     {/* Title Input */}
-                    <Card title="Work Form">
+                    <Card title="Work Form" className="mb-5">
                         <div className="row mb-5">
-                            <label>Title *</label>
+                            <label className='font-bold'>Title *</label>
                             <input
                                 type="text"
                                 name="title"
@@ -69,7 +84,7 @@ export default function Contact() {
                             />
                         </div>
                         <div className="row mb-5">
-                            <label>Employment Type</label>
+                            <label className='font-bold'>Employment Type</label>
                             <select
                                 name="employmentType"
                                 onChange={inputHandler}
@@ -82,10 +97,10 @@ export default function Contact() {
                                     )
                                 }
                             </select>
-                            <p>Learn more about <a href="/employment" className="text-blue-400">employment types</a></p>
+                            <p className='text-gray-400 text-sm'>Learn more about <a href="/employment" className="text-blue-400">employment types</a></p>
                         </div>
                         <div className="row mb-5">
-                            <label>Company Name *</label>
+                            <label className='font-bold'>Company Name *</label>
                             <input
                                 type="text"
                                 name='company'
@@ -150,15 +165,16 @@ export default function Contact() {
                         <div className="flex justify-end">
                             <button
                                 type="button"
-                                onClick={handleSubmit}
-                                className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none"
+                                onClick={onSubmitData}
+                                className=" text-white font-bold py-2 px-4 hover:bg-rose-400 focus:outline-none justify-center rounded-md bg-rose-600"
                             >
-                                Submit
+                                Submit Data
                             </button>
                         </div>
                     </Card>
                 </div>
             </div>
         </div>
+        </>
     );
 }
