@@ -28,6 +28,10 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
       path: "/work",
       text: "Work",
     },
+    {
+      path: "/admin/work",
+      text: "Form Work",
+    },
   ];
 
   return (

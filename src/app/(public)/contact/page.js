@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 const ItemCard = ({label, value})=>{
     return (
-        <div className='flex gap-4 bg-white  rounded-md m-2 p-2'>
+        <div className='flex gap-4 bg-white rounded-md m-2 p-2'>
             <div>{ label }</div>
             <div>{ value }</div>
         </div>

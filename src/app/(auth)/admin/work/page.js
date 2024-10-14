@@ -1,180 +1,181 @@
 "use client";
-import { useState } from 'react';
-import Card from '../../../../components/card';
+import { useState, useEffect } from "react";
+import Card from "../../../../components/card";
 
 export default function AdminWork() {
-    const [data, setData] = useState({
-        title: '',
-        employmentType: '',
-        company: '',
-        location: '',
-        locationType: '',
-        startDate: '',
-        endDate: ''
-    });
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    subjek: "",
+    message: "",
+  });
 
-    const optEmployeeType = [
-        { label: 'Full Time', value: 'full-time' },
-        { label: 'Part Time', value: 'part-time' },
-        { label: 'Contract', value: 'contract' },
-        { label: 'Internship', value: 'internship' }
-    ];
+  const [dataContact, setDataContact] = useState(null);
+  const [isLoading, setLoading] = useState(true);
 
-    const optLocation = [
-        { label: 'Onsite', value: 'Onsite' },
-        { label: 'WFH', value: 'WFH' },
-        { label: 'Remote', value: 'Remote' },
-    ];
+  useEffect(() => {
+    onLoadData();
+  }, []);
 
-    const inputHandler = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value });
-    };
+  async function onLoadData() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact");
+      if (!res.ok) throw new Error("Network response was not ok");
+      const contactData = await res.json();
+      setDataContact(contactData);
+    } catch (error) {
+      console.error("Error fetching contact data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    const onSubmitData = async () => {
-        try {
-            let res = await fetch('/api/work', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+  const ItemCard = ({ label, value }) => (
+    <div className="flex gap-4 bg-white rounded-md m-2 p-2">
+      <div>{label}</div>
+      <div>{value}</div>
+    </div>
+  );
 
-            if (!res.ok) {
-                // Jika respons tidak OK, lemparkan kesalahan
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+  const inputHandler = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
-            let resData = await res.json();
-            if (!resData.data) {
-                throw new Error(resData.message);
-            }
-            alert("Data berhasil ditambahkan dengan id: " + resData.data.insertedId);
-        } catch (err) {
-            console.log("ERROR", err.message);
-            alert(err.message);
-        }
-    };
+  async function onSubmitData() {
+    const { name, email, subjek, message } = data;
 
-    return (
-        <>
-        <div className="flex mt-20 justify-center">
-            <div className="md:w-3/4">
-                <div className="bg-white-800 dark:bg-black dark:text-white p-5 rounded-xl justify-content-left">
-                    <h3 className="text-xl py-2"><b>Add Experience</b></h3>
-                    <p className="text-red-400">*indicates required</p>
-                    <div className="col-md-2 bg-sky-50 dark:bg-black dark:text-white p-2 border-radius-50 mt-5">
-                            <div className="row">
-                                <h4><b>Notify Network</b></h4>
-                                <p>Turn on to notify your network of key profile changes (such as new job) and work anniversaries. Updates can take up to 2 hours.</p>
-                                <p>Learn more about <a href='/home' className='text-blue-500 cursor-pointer'>sharing profile changes</a></p>
-                            </div>
-                    </div>
-                    {/* Title Input */}
-                    <Card title="Work Form" className="mb-5">
-                        <div className="row mb-5">
-                            <label className='font-bold'>Title *</label>
-                            <input
-                                type="text"
-                                name="title"
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
-                                value={data.title}
-                                onChange={inputHandler}
-                                placeholder="Ex: Retail Sales Manager"
-                            />
-                        </div>
-                        <div className="row mb-5">
-                            <label className='font-bold'>Employment Type</label>
-                            <select
-                                name="employmentType"
-                                onChange={inputHandler}
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
-                            >
-                                <option value="">Please Select</option>
-                                {
-                                    optEmployeeType.map((item, key) =>
-                                        <option key={key} value={item.value}>{item.label}</option>
-                                    )
-                                }
-                            </select>
-                            <p className='text-gray-400 text-sm'>Learn more about <a href="/employment" className="text-blue-400">employment types</a></p>
-                        </div>
-                        <div className="row mb-5">
-                            <label className='font-bold'>Company Name *</label>
-                            <input
-                                type="text"
-                                name='company'
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
-                                onChange={inputHandler}
-                                placeholder="Ex: Microsoft"
-                            />
-                        </div>
-                        <div className="row mb-5">
-                            <label>Location</label>
-                            <input
-                                type="text"
-                                name="location"
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
-                                onChange={inputHandler}
-                                placeholder="Ex: London, United Kingdom"
-                            />
-                        </div>
-                        <div className="row mb-5">
-                            <label>Location Type</label>
-                            <select
-                                name="locationType"
-                                onChange={inputHandler}
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
-                            >
-                                <option value="">Please Select</option>
-                                {
-                                    optLocation.map((item, key) =>
-                                        <option key={key} value={item.value}>{item.label}</option>
-                                    )
-                                }
-                            </select>
-                            <p className="text-gray-400">Pick a location type (ex: remote)</p>
-                        </div>
-                        <div className="row mb-5">
-                            <input
-                                type="checkbox"
-                                className="border-2 border-blue-300 bg-transparent hover:bg-blue-300 focus:outline-none focus:border-blue-500 h-5 w-5"
-                                value="Submit"
-                            />
-                            <label className="ml-2"> I am currently working in this role</label>
-                        </div>
-                        <div className="row mb-5">
-                            <label>Start Date *</label>
-                            <input
-                                type="date"
-                                name="startDate"
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
-                                onChange={inputHandler}
-                            />
-                        </div>
-                        <div className="row mb-5">
-                            <label>End Date *</label>
-                            <input
-                                type="date"
-                                name="endDate"
-                                className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
-                                onChange={inputHandler}
-                            />
-                        </div>
+    try {
+      const res = await fetch("/api/work", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                onClick={onSubmitData}
-                                className=" text-white font-bold py-2 px-4 hover:bg-rose-400 focus:outline-none justify-center rounded-md bg-rose-600"
-                            >
-                                Submit Data
-                            </button>
-                        </div>
-                    </Card>
+      const resData = await res.json();
+
+      if (!resData.data) {
+        throw new Error(resData.message);
+      }
+
+      alert("Data berhasil disimpan dengan id \n" + resData.data.insertedId);
+    } catch (err) {
+      console.error("ERR", err.message);
+      alert(err.message);
+    }
+  }
+
+  return (
+    <>
+      <div className="flex mt-20 justify-center">
+        <div className="md:w-2/4">
+          <div className="bg-rose-50 dark:bg-black dark:text-white p-5 mt-5 mb-5 rounded-xl">
+            <h3 className="text-xl py-2 text-center">
+              <b>Get In Touch</b>
+            </h3>
+            <p className="text-red-400">Leave a message</p>
+
+            <Card title="Work Form" className="mb-5">
+              <div className="flex flex-col md:flex-row md:space-x-4 mb-5">
+                <div className="flex-1">
+                  <label className="font-bold">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={data.name}
+                    onChange={inputHandler}
+                    placeholder="Ex: Nama"
+                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-800 w-full"
+                  />
                 </div>
-            </div>
+
+                <div className="flex-1">
+                  <label className="font-bold">Email</label>
+                  <input
+                    type="text"
+                    name="email"
+                    value={data.email}
+                    onChange={inputHandler}
+                    placeholder="Ex: Email@gmail.com"
+                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-800 w-full"
+                  />
+                </div>
+              </div>
+
+              <div className="row mb-5">
+                <label className="font-bold">Subject</label>
+                <input
+                  name="subjek"
+                  type="text"
+                  onChange={inputHandler}
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                />
+              </div>
+
+              <div className="row mb-5">
+                <label className="font-bold">Message</label>
+                <textarea
+                  name="message"
+                  onChange={inputHandler}
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full h-24 resize-none"
+                  placeholder="Write your message here..."
+                />
+              </div>
+
+              <button
+                onClick={onSubmitData}
+                className="text-white font-bold py-2 px-4 hover:bg-rose-400 focus:outline-none justify-center rounded-md bg-rose-600"
+              >
+                Submit Data
+              </button>
+            </Card>
+          </div>
         </div>
-        </>
-    );
+        <div className="md:w-1/3">
+          <div>
+            <Card>
+              <div className="bg-rose-50 dark:bg-black dark:text-white justify-center p-10">
+                {!isLoading && dataContact ? (
+                  <>
+                    {dataContact.location &&
+                      Object.entries(dataContact.location).length > 0 && (
+                        <>
+                          {Object.entries(dataContact.location).map(
+                            ([key, value]) => (
+                              <ItemCard label={key} value={value} key={key} />
+                            )
+                          )}
+                        </>
+                      )}
+                    {dataContact.phone &&
+                      Object.entries(dataContact.phone).length > 0 && (
+                        <>
+                          {Object.entries(dataContact.phone).map(
+                            ([key, value]) => (
+                              <ItemCard label={key} value={value} key={key} />
+                            )
+                          )}
+                        </>
+                      )}
+                    {dataContact.social &&
+                      Object.entries(dataContact.social).length > 0 && (
+                        <>
+                          {Object.entries(dataContact.social).map(
+                            ([key, value]) => (
+                              <ItemCard label={key} value={value} key={key} />
+                            )
+                          )}
+                        </>
+                      )}
+                  </>
+                ) : (
+                  <p>Loading...</p> // Optional loading state
+                )}
+              </div>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

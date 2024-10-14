@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <ViewTransitions>
       <div className={inter.className}>
       <ThemeProvider attribute="class" disableTransitionOnChange>
-        <div className="relative">
+        <div className="relative bg-grey-200">
           <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
           <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
             <header>
