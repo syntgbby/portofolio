@@ -19,7 +19,6 @@ interface  SocialMedia  {
 }
 
 interface  Phone  {
-  suport: string | null;
   office: string;
   personal: string;
 }
@@ -36,9 +35,8 @@ export default function handler(
       street:"Jl. Jalan"
     },
     phone:{
-      office:"021 88989",
-      personal:"0813 484994 999794", 
-      suport: null
+      office:"021-88989",
+      personal:"+6281292322"
     },
     social: {
       email:"myname@mail.com",

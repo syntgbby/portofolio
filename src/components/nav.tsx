@@ -25,12 +25,8 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
       text: "About",
     },
     {
-      path: "/work",
-      text: "Work",
-    },
-    {
-      path: "/admin/work",
-      text: "Form Work",
+      path: "/form-message/work",
+      text: "Work Experience",
     },
   ];
 
