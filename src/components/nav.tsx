@@ -25,8 +25,8 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
       text: "About",
     },
     {
-      path: "/form-message/work",
-      text: "Work Experience",
+      path: "/login",
+      text: "Login",
     },
   ];
 

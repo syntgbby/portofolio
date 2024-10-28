@@ -1,199 +1,187 @@
 "use client";
-import { useState, useEffect } from "react";
-import Card from "../../../../components/card";
+import { useState, useEffect } from 'react';
+import Card from '../../../../components/card';
+import WorkList from './component/work-list';
 
 export default function AdminWork() {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    subjek: "",
-    message: "",
-  });
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        title: '',
+        employmentType: '',
+        company: '',
+        location: '',
+        locationType: '',
+        startDate: '',
+        endDate: ''
+    });
 
-  const [dataContact, setDataContact] = useState(null);
-  const [isLoading, setLoading] = useState(true);
+    const optEmployeeType = [
+        { label: 'Full Time', value: 'full-time' },
+        { label: 'Part Time', value: 'part-time' },
+        { label: 'Contract', value: 'contract' },
+        { label: 'Internship', value: 'internship' }
+    ];
 
-  useEffect(() => {
-    onLoadData();
-  }, []);
+    const optLocation = [
+        { label: 'Onsite', value: 'Onsite' },
+        { label: 'WFH', value: 'WFH' },
+        { label: 'Remote', value: 'Remote' },
+    ];
 
-  async function onLoadData() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/contact");
-      if (!res.ok) throw new Error("Network response was not ok");
-      const contactData = await res.json();
-      setDataContact(contactData);
-    } catch (error) {
-      console.error("Error fetching contact data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    const inputHandler = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  const ItemCard = ({ label, value }) => (
-    <div className="flex gap-2 bg-white dark:bg-black dark:text-white rounded-md m-2 p-2 text-sm">
-      <div className="flex flex-row justify-between w-full">
-        <div className="font-bold mr-2">{label}</div>
-        <div>{value}</div>
-      </div>
-    </div>
-  );
-
-  const inputHandler = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  async function onSubmitData() {
-    const { name, email, subjek, message } = data;
-
-    if (!name || !email || !subjek || !message) {
-      alert("Please fill in all fields");
-      return;
+    async function onLoadData() {
+        setLoading(true);
+        try {
+            let res = await fetch('/api/work');
+            let data = await res.json();
+            // Handle the fetched data as needed
+        } catch (error) {
+            console.error('Failed to load data:', error);
+        } finally {
+            setLoading(false);
+        }
     }
 
-    try {
-      const res = await fetch("/api/work", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+    async function onSubmitData() {
+        try {
+            const res = await fetch("/api/work", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
 
-      const resData = await res.json();
+            const resData = await res.json();
 
-      if (!resData.data) {
-        throw new Error(resData.message);
-      }
+            if (!resData.data) {
+                throw new Error(resData.message);
+            }
 
-      alert("Data berhasil disimpan dengan id \n" + resData.data.insertedId);
-    } catch (err) {
-      console.error("ERR", err.message);
-      alert(err.message);
+            alert("Data berhasil disimpan dengan id \n" + resData.data.insertedId);
+            await onLoadData(); // Refresh the work list
+            setFormData({ title: '', employmentType: '', company: '', location: '', locationType: '', startDate: '', endDate: '' }); // Reset form
+        } catch (err) {
+            console.error("ERR", err.message);
+            alert(err.message);
+        }
     }
-  }
 
-  return (
-    <>
-      <div className="flex mt-28 justify-center">
-        <div className="md:w-2/4 md:p-2 md:mb-0 mb-5">
-          <div className="bg-rose-100 dark:bg-black dark:text-white p-5 mt-5 mb-5 rounded-xl">
-            <h3 className="text-xl py-2 text-center">
-              <b>Get In Touch</b>
-            </h3>
-            <p className="text-red-500 font-serif font-light text-center text-sm mb-5">
-              Leave a message here and I will get back to you as soon as
-              possible
-            </p>
+    useEffect(() => {
+        onLoadData();
+    }, []);
 
-            <Card className="mb-5">
-              <div className="flex flex-col md:flex-row md:space-x-4 mb-5">
-                <div className="flex-1 md:mb-0 mb-5">
-                  <label className="font-bold text-sm">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={data.name}
-                    onChange={inputHandler}
-                    placeholder="Ex: Nama"
-                    className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
-                    autoComplete="off"
-                    autoCorrect="off"
-                  />
+    return (
+        <>
+            {loading && <p>Loading...</p>}
+            <div className="flex mt-20 justify-center">
+                <div className="md:w-3/4">
+                    <div className="bg-white-800 dark:bg-black dark:text-white p-5 rounded-xl justify-content-left">
+                        <h3 className="text-xl py-2"><b>Add Experience</b></h3>
+                        <p className="text-red-400">*indicates required</p>
+                        <div className="col-md-2 bg-sky-50 dark:text-black p-2 border-radius-50 mt-5 rounded-lg">
+                            <div className="row">
+                                <h4><b>Notify Network</b></h4>
+                                <p>Turn on to notify your network of key profile changes (such as new job) and work anniversaries. Updates can take up to 2 hours.</p>
+                                <p>Learn more about <a href='/home' className='text-blue-500 cursor-pointer'>sharing profile changes</a></p>
+                            </div>
+                        </div>
+                        <Card title="Work Form" className="mb-5">
+                            <div className="row mb-5">
+                                <label className='font-bold'>Title *</label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    value={formData.title}
+                                    onChange={inputHandler}
+                                    placeholder="Ex: Retail Sales Manager"
+                                />
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>Employment Type</label>
+                                <select
+                                    name="employmentType"
+                                    onChange={inputHandler}
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
+                                >
+                                    <option value="">Please Select</option>
+                                    {optEmployeeType.map((item, key) => (
+                                        <option key={key} value={item.value}>{item.label}</option>
+                                    ))}
+                                </select>
+                                <p className='text-gray-400 text-sm'>Learn more about <a href="/employment" className="text-blue-400">employment types</a></p>
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>Company Name *</label>
+                                <input
+                                    type="text"
+                                    name='company'
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    onChange={inputHandler}
+                                    placeholder="Ex: Microsoft"
+                                />
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>Location</label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    onChange={inputHandler}
+                                    placeholder="Ex: London, United Kingdom"
+                                />
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>Location Type</label>
+                                <select
+                                    name="locationType"
+                                    onChange={inputHandler}
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
+                                >
+                                    <option value="">Please Select</option>
+                                    {optLocation.map((item, key) => (
+                                        <option key={key} value={item.value}>{item.label}</option>
+                                    ))}
+                                </select>
+                                <p className="text-gray-400">Pick a location type (ex: remote)</p>
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>Start Date *</label>
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    onChange={inputHandler}
+                                />
+                            </div>
+                            <div className="row mb-5">
+                                <label className='font-bold'>End Date *</label>
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    onChange={inputHandler}
+                                />
+                            </div>
+
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={onSubmitData}
+                                    className="text-white font-bold py-2 px-4 hover:bg-rose-400 focus:outline-none justify-center rounded-md bg-rose-600"
+                                >
+                                    Submit Data
+                                </button>
+                            </div>
+                        </Card>
+                        <Card title="List of Work" style="mt-5">
+                            <WorkList/>
+                        </Card>
+                    </div>
                 </div>
-
-                <div className="flex-1">
-                  <label className="font-bold text-sm">Email</label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={data.email}
-                    onChange={inputHandler}
-                    placeholder="Ex: Email@gmail.com"
-                    className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
-                    autoComplete="off"
-                    autoCorrect="off"
-                  />
-                </div>
-              </div>
-
-              <div className="row mb-5">
-                <label className="font-bold text-sm">Subject</label>
-                <input
-                  name="subjek"
-                  type="text"
-                  onChange={inputHandler}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:borde100rose-500 w-full"
-                  autoComplete="off"
-                  autoCorrect="off"
-                />
-              </div>
-
-              <div className="row mb-2">
-                <label className="font-bold text-sm">Message</label>
-                <textarea
-                  name="message"
-                  onChange={inputHandler}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-500 w-full h-24 resize-none placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
-                  placeholder="Write your message here..."
-                  autoComplete="off"
-                  autoCorrect="off"
-                />
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={onSubmitData}
-                  className="text-white font-semibold text-sm py-2 px-4 hover:bg-rose-400 focus:outline-none rounded-md bg-rose-600"
-                >
-                  Submit Data
-                </button>
-              </div>
-            </Card>
-          </div>
-        </div>
-        <div className="md:w-1/3">
-          <Card>
-            <div className="bg-rose-100 dark:bg-black dark:text-white justify-center p-5 rounded-xl py-10 mb-5">
-              {!isLoading && dataContact ? (
-                <>
-                  {dataContact.location &&
-                    Object.entries(dataContact.location).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.location).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                  {dataContact.phone &&
-                    Object.entries(dataContact.phone).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.phone).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                  {dataContact.social &&
-                    Object.entries(dataContact.social).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.social).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                </>
-              ) : (
-                <p>Loading...</p> // Optional loading state
-              )}
             </div>
-          </Card>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 }

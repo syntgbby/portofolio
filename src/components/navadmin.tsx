@@ -18,7 +18,11 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   const links = [
     {
       path: "/admin",
-      text: "Admin Panel",
+      text: "List Messages",
+    },
+    {
+      path: "/admin/message",
+      text: "Form Message",
     },
     {
       path: "/admin/work",

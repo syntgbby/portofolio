@@ -2,31 +2,31 @@
 import { useEffect, useState } from 'react';
 
 export default function Dashboard() {
-  const [workData, setWorkData] = useState([]);
+  const [messageData, setMessageData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchWorkData() {
+    async function fetchMessageData() {
       try {
-        const response = await fetch('/api/work');
+        const response = await fetch('/api/message');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        setWorkData(data.data); // Assuming your response structure is { data: [...] }
+        setMessageData(data.data); // Assuming your response structure is { data: [...] }
       } catch (error) {
         console.error("Error fetching work data:", error);
       } finally {
         setIsLoading(false);
       }
     }
-    fetchWorkData();
+    fetchMessageData();
   }, []);
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this entry?")) {
       try {
-        const response = await fetch(`/api/work?id=${id}`, {
+        const response = await fetch(`/api/message?id=${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -59,7 +59,7 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {workData.map((item) => (
+            {messageData.map((item) => (
               <tr key={item._id} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border-b">{item.name}</td>
                 <td className="py-2 px-4 border-b">{item.email}</td>

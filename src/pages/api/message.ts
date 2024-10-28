@@ -19,10 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (typeof body !== "object" || Array.isArray(body)) {
             throw new Error('Invalid request format');
           }
+          if (!body.name || !body.email || !body.subjek || !body.message) {
+            throw new Error('All fields (name, email, subject, message) are required');
+          }
 
           // Insert data into the database
-          const myWork = await db.collection("work_gebby").insertOne(body);
-          res.status(201).json({ data: myWork });
+          const myMessage = await db.collection("message_gebby").insertOne(body);
+          res.status(201).json({ data: myMessage });
         } catch (err) {
           console.error("Error in POST request:", err);
           res.status(422).json({ message: err.message });
@@ -31,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         case "GET":
           try {
-            const allPosts = await db.collection("work_gebby").find({}).toArray();
+            const allPosts = await db.collection("message_gebby").find({}).toArray();
             res.status(200).json({ data: allPosts });
           } catch (err) {
             console.error("Error in GET request:", err);
@@ -46,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: "Invalid ID" });
           }
 
-          const result = await db.collection("work_gebby").deleteOne({ _id: new ObjectId(id) });
+          const result = await db.collection("message_gebby").deleteOne({ _id: new ObjectId(id) });
 
           if (result.deletedCount === 0) {
             return res.status(404).json({ message: "Entry not found" });
