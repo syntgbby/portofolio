@@ -17,17 +17,13 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
 
   const links = [
     {
-      path: "/",
-      text: "Home",
-    },
-    {
-      path: "/about",
-      text: "About",
-    },
-    {
       path: "/login",
       text: "Login",
     },
+    {
+      path: "/register",
+      text: "Register",
+    }
   ];
 
   return (

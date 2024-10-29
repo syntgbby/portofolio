@@ -35,7 +35,7 @@ export default function AdminWork() {
     async function onLoadData() {
         setLoading(true);
         try {
-            let res = await fetch('/api/work');
+            let res = await fetch('/api/work/work');
             let data = await res.json();
             // Handle the fetched data as needed
         } catch (error) {
@@ -47,7 +47,7 @@ export default function AdminWork() {
 
     async function onSubmitData() {
         try {
-            const res = await fetch("/api/work", {
+            const res = await fetch("/api/work/work", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),

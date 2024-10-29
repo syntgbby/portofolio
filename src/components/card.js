@@ -7,4 +7,4 @@ export default function Card({ children, title, style }) {
             </div>
         </div>
     );
-  }
+}

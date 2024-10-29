@@ -1,8 +1,10 @@
 "use client"
 import { useState, useEffect } from "react"
 import ConfigDialog from '../../../../../components/ConfirmDialog'
+import { useRouter } from "next/navigation"
 
 export default function WorkList(){
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const [deleteId, setDeleteId]= useState(null)
@@ -14,7 +16,7 @@ export default function WorkList(){
 
     async function onLoadData() {
         setLoading(true)
-        let res = await fetch('/api/work')
+        let res = await fetch('/api/work/work')
         let data = await res.json()
         setData(data.data)
         setLoading(false)
@@ -29,6 +31,10 @@ export default function WorkList(){
         setDeleteId(id);
     }
 
+    const onEditItem = (id)=>{
+        router.push(`/api/work/work?${id}`)
+    }
+
     const onCancel=()=>{
         setModal(false);
         setDeleteId(null);
@@ -39,26 +45,25 @@ export default function WorkList(){
     
         setModal(false);
         try {
-            const response = await fetch(`/api/work?id=${deleteId}`, {
+            const response = await fetch(`/api/work/work?id=${deleteId}`, {
                 method: 'DELETE',
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to delete the entry');
             }
-    
+
             setModal(true);
             setModalMessage(`Data Berhasil Dihapus`);
             setModalTitle("Info");
             setIsOkOnly(true);
-    
+
             // Update the data state to remove the deleted entry
             setData(prevData => prevData.filter(item => item._id !== deleteId));
         } catch (error) {
             console.error("Error deleting entry:", error);
         }
     };
-    
 
     useEffect(() => {
         onLoadData()
@@ -76,7 +81,6 @@ export default function WorkList(){
                 okBtnMessage={modalBtnOk}
                 isOkOnly={isOkOnly} 
             />
-
 
             <table className="min-w-full bg-white border border-gray-300">
                 <thead>
@@ -106,7 +110,7 @@ export default function WorkList(){
                                 <td className="py-2 px-4 border-b">{item.endDate}</td>
                                 <td className="py-2 px-4 border-b text-center">
                                     <div className="inline-flex text-[12px]">
-                                        <button className=" bg-green-300 hover:bg-green-400 text-gray-800 py-2 px-4 rounded-l">
+                                        <button onClick={()=>onEditItem(item._id)} className=" bg-green-300 hover:bg-green-400 text-gray-800 py-2 px-4 rounded-l">
                                             Edit
                                         </button>
                                         <button onClick={()=>onDeleteItem(item._id)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-r">
