@@ -3,7 +3,7 @@
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { ThemeSwitcher } from "./theme-switcher";
+import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 
@@ -17,13 +17,17 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
 
   const links = [
     {
-      path: "/login",
-      text: "Login",
+      path: "/admin",
+      text: "List Messages",
     },
     {
-      path: "/register",
-      text: "Register",
-    }
+      path: "/admin/message",
+      text: "Form Message",
+    },
+    {
+      path: "/admin/work",
+      text: "Work",
+    },
   ];
 
   return (

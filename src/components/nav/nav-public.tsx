@@ -1,9 +1,9 @@
 "use client";
 
 import { Link } from "next-view-transitions";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { ThemeSwitcher } from "./theme-switcher";
+import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 
@@ -14,20 +14,25 @@ interface NavProps {
 
 export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   const path = usePathname();
+  const router = useRouter();
 
+  const Login = () => {
+    router.push("/login")
+  }
+  const Register = () => {
+    router.push("/register")
+  }
   const links = [
     {
-      path: "/admin",
-      text: "List Messages",
+      path: "/login",
+      text: "Login",
+      onClick: Login
     },
     {
-      path: "/admin/message",
-      text: "Form Message",
-    },
-    {
-      path: "/admin/work",
-      text: "Work",
-    },
+      path: "/register",
+      text: "Register",
+      onClick: Register
+    }
   ];
 
   return (
@@ -52,17 +57,17 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
           return (
             <div key={link.path} className="lg:block hidden">
               {" "}
-              <Link
+              <button
                 className={clsx(
                   "hover:border-border dark:hover:border-darkBorder rounded-base border-2 px-2 py-1 transition-colors",
                   path === link.path
                     ? "border-border dark:border-darkBorder"
                     : "border-transparent"
                 )}
-                href={link.path}
+                onClick={link.onClick}
               >
                 {link.text}
-              </Link>
+              </button>
             </div>
           );
         })}

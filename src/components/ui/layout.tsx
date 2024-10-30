@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../sidebar";
+import Sidebar from "../sidebar/sidebar-public";
 import Navbar from "../nav";
 
 function Layout({ children }: { children: React.ReactNode }) { // Ubah 'layout' menjadi 'Layout'

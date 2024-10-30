@@ -3,8 +3,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useState } from "react";
-import Navbar from "@/components/nav";
-import Sidebar from "@/components/sidebar";
+import Navbar from "@/components/nav/nav-public";
+import Sidebar from "@/components/sidebar/sidebar-public";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ViewTransitions } from 'next-view-transitions'
 

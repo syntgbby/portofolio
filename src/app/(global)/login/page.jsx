@@ -1,11 +1,40 @@
 "use client"
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 export default function Login(){
     const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const onSubmitLogin=()=>{
-        router.push('/admin')
+    const onBack = ()=>{
+        router.push('/')
+    }
+
+    const onSignUp = ()=>{
+        router.push('/register')
+    }
+
+    const handleLogin = async (e)=>{
+        e.preventDefault();
+
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({email, password}),
+        });
+
+        const data = await response.json();
+
+        if(response.ok){
+            router.push('/admin');
+        }else{
+            console.error('Login error: ', data.message);
+        }
     }
 
     return (
@@ -25,7 +54,7 @@ export default function Login(){
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="" method="POST" className="space-y-6">
+            <form onSubmit={handleLogin} method="POST" className="space-y-6">
                 <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                     Email address
@@ -35,9 +64,11 @@ export default function Login(){
                         id="email"
                         name="email"
                         type="email"
+                        value={email}
+                        onChange={(e)=>setEmail(e.target.value)}
                         required
                         autoComplete="email"
-                        className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="dark:bg-dark dark:text-white pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink sm:text-sm sm:leading-6"
                     />
                 </div>
                 </div>
@@ -48,7 +79,7 @@ export default function Login(){
                     Password
                     </label>
                     <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                    <a href="#" className="font-semibold hover:text-rose-500">
                         Forgot password?
                     </a>
                     </div>
@@ -58,18 +89,19 @@ export default function Login(){
                         id="password"
                         name="password"
                         type="password"
+                        value={password}
+                        onChange={(e)=>setPassword(e.target.value)}
                         required
                         autoComplete="current-password"
-                        className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="dark:bg-dark dark:text-white pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink sm:text-sm sm:leading-6"
                     />
                 </div>
                 </div>
 
                 <div>
                     <button
-                        type="button"
-                        onClick={onSubmitLogin}
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        type="submit"
+                        className="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
                     >
                         Sign in
                     </button>
@@ -77,11 +109,17 @@ export default function Login(){
             </form>
 
             <p className="mt-10 text-center text-sm text-gray-500">
-                Not a member?{' '}
-                <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                Start a 14 day free trial
+                Don't have an account?{' '}
+                <a href="#" className="font-semibold leading-6 text-rose-600 hover:text-rose-500" onClick={onSignUp}>
+                Sign Up
                 </a>
             </p>
+
+                <div className="mt-3">
+                    <Button className="mt-3 px-6 py-1 dark:bg-rose-400 dark:hover:bg-rose-500" onClick={onBack}>
+                        Back
+                    </Button>
+                </div>
             </div>
         </div>
         </>

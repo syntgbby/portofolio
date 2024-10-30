@@ -14,14 +14,3 @@ export const RegisterFormSchema = z.object({
         .regex(/[^a-zA-Z0-9]/, {message: "Password must contain at least one special character"})
         .trim(),
 });
-
-export type FormState =
-| {
-    errors? : {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-    }
-    message?: string | null;
-}
-| undefined;
