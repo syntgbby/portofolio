@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
+import { useRouter } from "next/navigation"; // Use next/navigation
 
 interface NavProps {
   isOpen: boolean;
@@ -13,7 +14,21 @@ interface NavProps {
 }
 
 export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
+  const router = useRouter(); // Correctly call useRouter
   const path = usePathname();
+
+  const onLogOut = async () => {
+    const res = await fetch(`/api/auth/logout`, {
+      method: 'POST',
+    });
+
+    if (res.ok) {
+      router.push('/', { scroll: false });
+    } else {
+      const response = await res.json();
+      console.error('Logout error:', response.message);
+    }
+  };
 
   const links = [
     {
@@ -27,6 +42,11 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
     {
       path: "/admin/work",
       text: "Work",
+    },
+    {
+      path: "#", // Use "#" to indicate it's not a regular navigation link
+      text: "Log Out",
+      onClick: onLogOut, // Assign the logout function
     },
   ];
 
@@ -48,10 +68,21 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
           </a>
         </div>
 
-        {links.map((link) => {
-          return (
-            <div key={link.path} className="lg:block hidden">
-              {" "}
+        {links.map((link) => (
+          <div key={link.path} className="lg:block hidden">
+            {link.onClick ? (
+              <button
+                onClick={link.onClick}
+                className={clsx(
+                  "hover:border-border dark:hover:border-darkBorder rounded-base border-2 px-2 py-1 transition-colors",
+                  path === link.path
+                    ? "border-border dark:border-darkBorder"
+                    : "border-transparent"
+                )}
+              >
+                {link.text}
+              </button>
+            ) : (
               <Link
                 className={clsx(
                   "hover:border-border dark:hover:border-darkBorder rounded-base border-2 px-2 py-1 transition-colors",
@@ -63,9 +94,9 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
               >
                 {link.text}
               </Link>
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
         <ThemeSwitcher />
       </nav>
     </div>
