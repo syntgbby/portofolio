@@ -1,37 +1,59 @@
 "use client";
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function Login() {
     const router = useRouter();
-    const [error, setError] = useState('');
 
+    // State untuk data form dan error message
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+    });
+    const [error, setError] = useState('');
+    
+    // Handler untuk mengatasi perubahan input
+    const inputHandler = (e) => {
+        setData({ ...data, [e.target.name]: e.target.value });
+    };
+
+    // Handler untuk tombol "Back"
     const onBack = () => {
         router.push('/');
     };
 
+    // Handler untuk tombol "Sign Up"
     const onSignUp = () => {
         router.push('/register');
     };
 
-    const [data,setData]=useState({
-        email:'',
-        password:'',
-    });
-    const onSubmitLogin= async()=>{
-        const res = await fetch(`/api/auth/login`,{
-        method:'POST' , body : JSON.stringify(data)
-        })
-        let response = await res.json()
-        console.log(response.status)
-        if(res.status == 200){
-            router.push('/admin')
-        }
-    }
+    // Handler untuk form submit
+    const onSubmitLogin = async (e) => {
+        e.preventDefault();  // Mencegah reload halaman saat submit
 
-    const inputHandler = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value });
+        // Reset error message sebelum request
+        setError('');
+
+        // Mengirim data login ke API
+        try {
+            const res = await fetch(`/api/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+            });
+
+            if (res.status === 200) {
+                // Jika login berhasil, arahkan ke halaman /admin
+                router.push('/admin');
+            } else {
+                const response = await res.json();
+                // Menampilkan pesan error jika login gagal
+                setError(response.message || 'Login failed, please try again.');
+            }
+        } catch (err) {
+            // Menangani error jika terjadi masalah pada request
+            setError('An error occurred. Please try again later.');
+        }
     };
 
     return (
@@ -93,7 +115,8 @@ export default function Login() {
                             </div>
                         </div>
 
-                        {error && <p className="text-red-500">{error}</p>}
+                        {/* Menampilkan pesan error jika login gagal */}
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
 
                         <div>
                             <button
@@ -107,13 +130,20 @@ export default function Login() {
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Don't have an account?{' '}
-                        <a href="#" className="font-semibold leading-6 text-rose-600 hover:text-rose-500" onClick={onSignUp}>
+                        <a
+                            href="#"
+                            className="font-semibold leading-6 text-rose-600 hover:text-rose-500"
+                            onClick={onSignUp}
+                        >
                             Sign Up
                         </a>
                     </p>
 
                     <div className="mt-3">
-                        <Button className="mt-3 px-6 py-1 dark:bg-rose-400 dark:hover:bg-rose-500" onClick={onBack}>
+                        <Button
+                            className="mt-3 px-6 py-1 dark:bg-rose-400 dark:hover:bg-rose-500"
+                            onClick={onBack}
+                        >
                             Back
                         </Button>
                     </div>

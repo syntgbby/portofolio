@@ -2,52 +2,34 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button'; // Ensure this is the correct import path
-import ConfirmRegisterDialog from '@/components/ConfirmRegisterDialog'; // Update the path as needed
+// import ConfirmRegisterDialog from '@/components/ConfirmRegisterDialog'; // Update the path as needed
 
 export default function Register() {
-    const [formData, setFormData] = useState({
+    const [data, setData] = useState({
         name: '',
         email: '',
         password: '',
+        confirm_password: '',
     });
 
-    const [error, setError] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
-    const onHandleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const onSubmitRegister= async ()=>{
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null);
+        const res =  await fetch(`/api/auth/register`,{
+            method:'POST',
+            body: JSON.stringify(data),
+        })
+        let response = await res.json()
 
-        // Basic validation for password length
-        if (formData.password.length < 8) {
-            setError("Password must contain at least 8 characters.");
-            setIsOpen(true);
-            return;
+        if(res.status == 200){
+            router.push('/login')
         }
+    }
 
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            router.push('/login');
-        } else {
-            setError(data.error || "User already exists.");
-            setIsOpen(true);
-        }
-    };
+    const inputHandler= (e) =>{
+        setData({...data, [e.target.name]: e.target.value })
+      }
 
     return (
         <>
@@ -66,7 +48,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form action="" method="POST" className="space-y-6">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                                 Name
@@ -76,7 +58,7 @@ export default function Register() {
                                     id="name"
                                     name="name"
                                     type="text"
-                                    onChange={onHandleChange}
+                                    onChange={inputHandler}
                                     required
                                     autoComplete="name"
                                     className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -93,7 +75,7 @@ export default function Register() {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    onChange={onHandleChange}
+                                    onChange={inputHandler}
                                     required
                                     autoComplete="email"
                                     className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -110,7 +92,24 @@ export default function Register() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    onChange={onHandleChange}
+                                    onChange={inputHandler}
+                                    required
+                                    autoComplete="current-password"
+                                    className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                                Confirm Password
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    type="password"
+                                    onChange={inputHandler}
                                     required
                                     autoComplete="current-password"
                                     className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -118,11 +117,10 @@ export default function Register() {
                             </div>
                         </div>
 
-                        {error && <p className="text-red-500">{error}</p>}
-
                         <div>
                             <button
                                 type="submit"
+                                onClick={onSubmitRegister}
                                 className="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
                             >
                                 Sign Up
@@ -145,13 +143,6 @@ export default function Register() {
                 </div>
             </div>
 
-            <ConfirmRegisterDialog
-            showDialog={isOpen}
-            onOk={() => setIsOpen(false)} // This function closes the dialog
-            onCancel={() => setIsOpen(false)} // This function also closes the dialog
-            title="Error"
-            message={error}
-            />
         </>
     );
 }

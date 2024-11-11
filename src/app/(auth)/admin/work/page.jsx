@@ -12,8 +12,22 @@ export default function AdminWork() {
         location: '',
         locationType: '',
         startDate: '',
-        endDate: ''
+        endDate: '',
+        id: '' // Add `id` to the form data for handling updates
     });
+
+    const clearForm = () => {
+        setFormData({
+          title: '',
+          employmentType: '',
+          company: '',
+          location: '',
+          locationType: '',
+          startDate: '',
+          endDate: '',
+          id: '' // Clear the id too when resetting the form
+        });
+    }
 
     const optEmployeeType = [
         { label: 'Full Time', value: 'full-time' },
@@ -37,7 +51,7 @@ export default function AdminWork() {
         try {
             let res = await fetch('/api/work/work');
             let data = await res.json();
-            // Handle the fetched data as needed
+            setFormData({ ...formData, data: data.data || [] }); // Set the fetched data to display the list
         } catch (error) {
             console.error('Failed to load data:', error);
         } finally {
@@ -61,15 +75,54 @@ export default function AdminWork() {
 
             alert("Data berhasil disimpan dengan id \n" + resData.data.insertedId);
             await onLoadData(); // Refresh the work list
-            setFormData({ title: '', employmentType: '', company: '', location: '', locationType: '', startDate: '', endDate: '' }); // Reset form
+            clearForm(); // Reset form after submission
         } catch (err) {
             console.error("ERR", err.message);
             alert(err.message);
         }
     }
 
+    // Edit item handler
+    const onEditItem = async (id) => {
+        const response = await fetch(`/api/work/${id}`);
+        let resData = await response.json();
+        const workItem = resData.data[0]; // Assuming the data is an array with a single item
+
+        // Set form data with the fetched work item
+        setFormData({
+            title: workItem.title,
+            employmentType: workItem.employmentType,
+            company: workItem.company,
+            location: workItem.location,
+            locationType: workItem.locationType,
+            startDate: workItem.startDate,
+            endDate: workItem.endDate,
+            id: workItem._id // Set the `id` from the fetched item for updates
+        });
+    };
+
+    const onUpdateData = async () => {
+        try {
+            let res = await fetch(`/api/work/${formData.id}`, {
+                method: 'PUT',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData), // Use formData for updating
+            });
+
+            let resData = await res.json();
+            if (!resData.data) {
+                throw new Error(resData.message);
+            }
+            alert("Data berhasil disimpan dengan id");
+            clearForm();
+        } catch (err) {
+            console.error("ERR", err.message);
+            alert(err.message);
+        }
+    };
+
     useEffect(() => {
-        onLoadData();
+        onLoadData(); // Load data when the component is mounted
     }, []);
 
     return (
@@ -105,6 +158,7 @@ export default function AdminWork() {
                                     name="employmentType"
                                     onChange={inputHandler}
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
+                                    value={formData.employmentType}
                                 >
                                     <option value="">Please Select</option>
                                     {optEmployeeType.map((item, key) => (
@@ -119,6 +173,7 @@ export default function AdminWork() {
                                     type="text"
                                     name='company'
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    value={formData.company}
                                     onChange={inputHandler}
                                     placeholder="Ex: Microsoft"
                                 />
@@ -129,6 +184,7 @@ export default function AdminWork() {
                                     type="text"
                                     name="location"
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    value={formData.location}
                                     onChange={inputHandler}
                                     placeholder="Ex: London, United Kingdom"
                                 />
@@ -139,6 +195,7 @@ export default function AdminWork() {
                                     name="locationType"
                                     onChange={inputHandler}
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 mt-3 mb-3 w-full"
+                                    value={formData.locationType}
                                 >
                                     <option value="">Please Select</option>
                                     {optLocation.map((item, key) => (
@@ -153,6 +210,7 @@ export default function AdminWork() {
                                     type="date"
                                     name="startDate"
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    value={formData.startDate}
                                     onChange={inputHandler}
                                 />
                             </div>
@@ -162,22 +220,29 @@ export default function AdminWork() {
                                     type="date"
                                     name="endDate"
                                     className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                    value={formData.endDate}
                                     onChange={inputHandler}
                                 />
                             </div>
 
                             <div className="flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={onSubmitData}
-                                    className="text-white font-bold py-2 px-4 hover:bg-rose-400 focus:outline-none justify-center rounded-md bg-rose-600"
-                                >
-                                    Submit Data
-                                </button>
+                                {formData.id ? (
+                                    <button
+                                        onClick={onUpdateData}
+                                        className="mx-1 h-9 items-center justify-center px-4 rounded-md bg-amber-500">
+                                        <label>Update Data</label>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={onSubmitData}
+                                        className="mx-1 h-9 items-center justify-center px-4 rounded-md bg-amber-500">
+                                        <label>Submit Data</label>
+                                    </button>
+                                )}
                             </div>
                         </Card>
                         <Card title="List of Work" style="mt-5">
-                            <WorkList/>
+                            <WorkList onEditItem={onEditItem} />
                         </Card>
                     </div>
                 </div>

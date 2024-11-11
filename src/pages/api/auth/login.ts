@@ -1,30 +1,67 @@
-import type { NextApiRequest,NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from "../../../lib/mongodb";
-import{setCookie} from 'cookies-next';
+import { setCookie } from 'cookies-next';
+import { comparePassword, encrypt } from "../../../lib/session";
 
-export default async function handler(req:NextApiRequest,res:NextApiResponse){
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_NAME);
-    
-    switch(req.method){
-        case "POST":
-            try{
-                const body =JSON.parse(req.body)
 
-                if (body.email== "") {
-                    throw new Error('email is requires')
+    switch (req.method) {
+        case "POST":
+            try {
+                // Parse and validate the incoming body
+                const body = JSON.parse(req.body);
+                const { email, password } = body;
+
+                if (!email || email === "") {
+                    return res.status(400).json({ message: "Email is required" });
                 }
-                if (body.password == "") {
-                    throw new Error('password is required')
+
+                if (!password || password === "") {
+                    return res.status(400).json({ message: "Password is required" });
                 }
-                if (body.email == "admin@mail.com" && body.password == "123") {
-                    setCookie('auth-session', 'value' , {req,res,maxAge :60 * 6 * 24});
-                }else{
-                    throw new Error('invalid username and password')
+
+                // Fetch user from the database
+                const user = await db.collection("user_gebby").findOne({ email });
+
+                if (!user) {
+                    return res.status(400).json({ message: "Invalid email or password" });
                 }
-                res.status(200).json({message: 'login berhasil'});
-            }catch(err){
-                res.status(422).json({message:err.message});
+
+                // Compare the password with the hashed password in the database
+                const isPasswordValid = await comparePassword(password, user.password);
+                if (!isPasswordValid) {
+                    return res.status(400).json({ message: "Invalid email or password" });
+                }
+
+                // Create token data to store in the cookie
+                const tokenData = {
+                    id: user._id,
+                    email: user.email,
+                    name: user.name,
+                };
+
+                // Set the cookie (make sure to set options for better security)
+                const token = await encrypt(tokenData);
+                setCookie(`${process.env.AUTH_COOKIE_NAME}`, token, {
+                    req, 
+                    res, 
+                    maxAge: 60 * 6 * 24, // 6 days
+                    httpOnly: true, // Security: prevents JS access to cookies
+                    secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
+                    sameSite: 'strict', // Enhances CSRF protection
+                });
+
+                // Respond with success
+                return res.status(200).json({ message: "Login successful" });
+
+            } catch (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Internal server error" });
             }
+
+        default:
+            return res.status(405).json({ message: "Method Not Allowed" });
     }
 }
