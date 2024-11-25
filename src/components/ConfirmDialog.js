@@ -11,7 +11,7 @@ export default function ConfirmDialog({
   message='',
   title='',
   okBtnMessage="Submit",
-  onOkOny,
+  onOkOnly,
   isOkOnly=false
 }) {
 
@@ -51,7 +51,7 @@ export default function ConfirmDialog({
                   <button
                     type="button"
 
-                    onClick={() => onOkOny()}
+                    onClick={() => onOkOnly()}
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                   >
                     OK

@@ -12,8 +12,7 @@ export default function AdminWork() {
         location: '',
         locationType: '',
         startDate: '',
-        endDate: '',
-        id: '' // Add `id` to the form data for handling updates
+        endDate: ''
     });
 
     const clearForm = () => {
@@ -24,8 +23,7 @@ export default function AdminWork() {
           location: '',
           locationType: '',
           startDate: '',
-          endDate: '',
-          id: '' // Clear the id too when resetting the form
+          endDate: ''
         });
     }
 
@@ -96,8 +94,7 @@ export default function AdminWork() {
             location: workItem.location,
             locationType: workItem.locationType,
             startDate: workItem.startDate,
-            endDate: workItem.endDate,
-            id: workItem._id // Set the `id` from the fetched item for updates
+            endDate: workItem.endDate
         });
     };
 

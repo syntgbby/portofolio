@@ -44,11 +44,15 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
     },
     {
       path: "/admin/message",
-      text: "Form Message",
+      text: "Message",
     },
     {
       path: "/admin/work",
       text: "Work",
+    },
+    {
+      path: "/admin/blogs",
+      text: "Blogs",
     },
     {
       path: "#", // Placeholder path for logout

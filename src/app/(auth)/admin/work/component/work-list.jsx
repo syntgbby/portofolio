@@ -89,7 +89,7 @@ export default function WorkList({ onEditItem: editItemProp }) {
             <ConfigDialog  
                 onCancel={onCancel} 
                 onOk={onSubmitDelete} 
-                onOkOny={onCancel} 
+                onOkOnly={onCancel} 
                 showDialog={modal}
                 title={modalTitle}
                 message={modalMessage}

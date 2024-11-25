@@ -4,7 +4,8 @@ import {  NextResponse } from 'next/server'
 const protectedRoutes = [
     '/admin',
     "/admin/work",
-    "/admin/message"
+    "/admin/message",
+    "/admin/blogs"
 ]
 
 export default async function middleware(req: NextRequest) {
