@@ -17,7 +17,7 @@ export default function AdminBlogs({ onEditItem }) {
 
   const onEditHandler = (id) => {
     // Arahkan ke halaman form untuk mengedit item berdasarkan ID
-    router.push(`/admin/blogs/form?id=${id}`);
+    router.push(`/admin/blogs/id=${id}`);
   };
 
   useEffect(() => {
