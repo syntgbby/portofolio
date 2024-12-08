@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Card from "../../../../../components/card";
-import ConfigDialog from "../../../../../components/ConfirmDialog";
+import Card from "../../../../../../../components/card";
+import ConfigDialog from "../../../../../../../components/ConfirmDialog";
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 

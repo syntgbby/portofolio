@@ -16,23 +16,38 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   const path = usePathname();
   const router = useRouter();
 
-  const Login = () => {
-    router.push("/login")
-  }
-  const Register = () => {
-    router.push("/register")
-  }
+  const onLogOut = async () => {
+    try {
+      const res = await fetch(`/api/auth/logout`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        // Successfully logged out, redirect to home
+        router.push("/", { scroll: false });
+      } else {
+        const response = await res.json();
+        console.error("Logout error:", response.message);
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+    }
+  };
+
+  const Blogs = () => {
+    router.push("/public/blogs");
+  };
   const links = [
     {
-      path: "/login",
-      text: "Login",
-      onClick: Login
+      path: "/public/blogs",
+      text: "Blogs",
+      onClick: Blogs,
     },
     {
-      path: "/register",
-      text: "Register",
-      onClick: Register
-    }
+      path: "#", // Placeholder path for logout
+      text: "Log Out",
+      onClick: onLogOut, // Assign the logout function
+    },
   ];
 
   return (

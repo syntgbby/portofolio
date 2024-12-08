@@ -3,8 +3,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useState } from "react";
-import Navbar from "@/components/nav/nav-user";
-import Sidebar from "@/components/sidebar/sidebar-user";
+import Navbar from "@/components/nav/nav-public";
+import Sidebar from "@/components/sidebar/sidebar-public";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ViewTransitions } from "next-view-transitions";
 
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <ViewTransitions>
       <div className={inter.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
-          <div className="relative">
+          <div className="relative bg-grey-200">
             <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
             <div
               className={`main-content ${sidebarOpen ? "sidebar-open" : ""}`}

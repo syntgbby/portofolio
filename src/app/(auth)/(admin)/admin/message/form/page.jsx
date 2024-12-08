@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import Card from "../../../../components/card";
+import Card from "../../../../../../components/card";
 
-export default function AdminWork() {
+export default function MessageForm() {
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -32,7 +32,7 @@ export default function AdminWork() {
   }
 
   const ItemCard = ({ label, value }) => (
-    <div className="flex gap-2 bg-white dark:bg-black dark:text-white rounded-md m-2 p-2 text-sm">
+    <div className="flex gap-2 rounded-md m-2 p-2 text-sm bg-rose-100">
       <div className="flex flex-row justify-between w-full">
         <div className="font-bold mr-2">{label}</div>
         <div>{value}</div>
@@ -76,7 +76,7 @@ export default function AdminWork() {
     <>
       <div className="flex mt-28 justify-center">
         <div className="md:w-2/4 md:p-2 md:mb-0 mb-5">
-          <div className="bg-rose-100 dark:bg-black dark:text-white p-5 mt-5 mb-5 rounded-xl">
+          <div className="bg-rose-100 p-5 mt-5 mb-5 rounded-xl">
             <h3 className="text-xl py-2 text-center">
               <b>Get In Touch</b>
             </h3>
@@ -85,7 +85,7 @@ export default function AdminWork() {
               possible
             </p>
 
-            <Card className="mb-5">
+            <Card className="mb-5 bg-rose-100">
               <div className="flex flex-col md:flex-row md:space-x-4 mb-5">
                 <div className="flex-1 md:mb-0 mb-5">
                   <label className="font-bold text-sm">Name</label>
@@ -95,7 +95,7 @@ export default function AdminWork() {
                     value={data.name}
                     onChange={inputHandler}
                     placeholder="Ex: Nama"
-                    className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
+                    className="dark:bg-white border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
                     autoComplete="off"
                     autoCorrect="off"
                   />
@@ -109,7 +109,7 @@ export default function AdminWork() {
                     value={data.email}
                     onChange={inputHandler}
                     placeholder="Ex: Email@gmail.com"
-                    className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
+                    className="dark:bg-white border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
                     autoComplete="off"
                     autoCorrect="off"
                   />
@@ -122,7 +122,7 @@ export default function AdminWork() {
                   name="subjek"
                   type="text"
                   onChange={inputHandler}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:borde100rose-500 w-full"
+                  className="dark:bg-white border-b-2 border-gray-300 focus:outline-none focus:border-rose-800 w-full placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
                   autoComplete="off"
                   autoCorrect="off"
                 />
@@ -133,7 +133,7 @@ export default function AdminWork() {
                 <textarea
                   name="message"
                   onChange={inputHandler}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:border-rose-500 w-full h-24 resize-none placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
+                  className="dark:bg-white border-b-2 border-gray-300 focus:outline-none focus:border-rose-500 w-full h-24 resize-none placeholder:text-sm placeholder:font-normal placeholder:text-gray-400"
                   placeholder="Write your message here..."
                   autoComplete="off"
                   autoCorrect="off"
@@ -151,46 +151,44 @@ export default function AdminWork() {
             </Card>
           </div>
         </div>
-        <div className="md:w-1/3">
+        <div className="md:w-1/3 pt-5">
           <Card>
-            <div className="bg-rose-100 dark:bg-black dark:text-white justify-center p-5 rounded-xl py-10 mb-5">
-              {!isLoading && dataContact ? (
-                <>
-                  {dataContact.location &&
-                    Object.entries(dataContact.location).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.location).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                  {dataContact.phone &&
-                    Object.entries(dataContact.phone).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.phone).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                  {dataContact.social &&
-                    Object.entries(dataContact.social).length > 0 && (
-                      <>
-                        {Object.entries(dataContact.social).map(
-                          ([key, value]) => (
-                            <ItemCard label={key} value={value} key={key} />
-                          )
-                        )}
-                      </>
-                    )}
-                </>
-              ) : (
-                <p>Loading...</p> // Optional loading state
-              )}
-            </div>
+            {/* <div className="bg-rose-100 dark:bg-black dark:text-white justify-center p-5 rounded-xl py-10 mb-5"> */}
+            {!isLoading && dataContact ? (
+              <>
+                {dataContact.location &&
+                  Object.entries(dataContact.location).length > 0 && (
+                    <>
+                      {Object.entries(dataContact.location).map(
+                        ([key, value]) => (
+                          <ItemCard label={key} value={value} key={key} />
+                        )
+                      )}
+                    </>
+                  )}
+                {dataContact.phone &&
+                  Object.entries(dataContact.phone).length > 0 && (
+                    <>
+                      {Object.entries(dataContact.phone).map(([key, value]) => (
+                        <ItemCard label={key} value={value} key={key} />
+                      ))}
+                    </>
+                  )}
+                {dataContact.social &&
+                  Object.entries(dataContact.social).length > 0 && (
+                    <>
+                      {Object.entries(dataContact.social).map(
+                        ([key, value]) => (
+                          <ItemCard label={key} value={value} key={key} />
+                        )
+                      )}
+                    </>
+                  )}
+              </>
+            ) : (
+              <p>Loading...</p> // Optional loading state
+            )}
+            {/* </div> */}
           </Card>
         </div>
       </div>

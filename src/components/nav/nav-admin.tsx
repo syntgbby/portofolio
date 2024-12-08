@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react"; // Import useState for dropdown control
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { ThemeSwitcher } from "../theme-switcher";
@@ -16,6 +17,9 @@ interface NavProps {
 export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   const router = useRouter(); // Correctly call useRouter
   const path = usePathname();
+
+  const [isBlogsDropdownOpen, setIsBlogsDropdownOpen] = useState(false); // State to control the dropdown visibility
+  const [isMessageDropdownOpen, setIsMessageDropdownOpen] = useState(false); // State to control the dropdown visibility
 
   // Handle logout functionality
   const onLogOut = async () => {
@@ -39,20 +43,20 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   // Navigation links and their respective actions
   const links = [
     {
-      path: "/admin",
-      text: "List Messages",
-    },
-    {
-      path: "/admin/message",
+      path: "#", // Placeholder for Blogs
       text: "Message",
+      onMouseEnter: () => setIsMessageDropdownOpen(true), // Open dropdown on hover
+      onMouseLeave: () => setIsMessageDropdownOpen(false), // Close dropdown when mouse leaves
     },
     {
       path: "/admin/work",
       text: "Work",
     },
     {
-      path: "/admin/blogs",
+      path: "#", // Placeholder for Blogs
       text: "Blogs",
+      onMouseEnter: () => setIsBlogsDropdownOpen(true), // Open dropdown on hover
+      onMouseLeave: () => setIsBlogsDropdownOpen(false), // Close dropdown when mouse leaves
     },
     {
       path: "#", // Placeholder path for logout
@@ -71,7 +75,7 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
 
         {/* Logo */}
         <div className="text-white font-bold text-lg">
-          <Link href="/">
+          <Link href="/admin">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -85,7 +89,12 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
         {/* Navigation links */}
         <div className="lg:flex hidden gap-4 items-center">
           {links.map((link) => (
-            <div key={link.path} className="relative">
+            <div
+              key={link.path}
+              className="relative"
+              onMouseEnter={link.onMouseEnter} // Set hover to open dropdown
+              onMouseLeave={link.onMouseLeave} // Set hover to close dropdown
+            >
               {link.onClick ? (
                 <button
                   onClick={link.onClick}
@@ -110,6 +119,47 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
                 >
                   {link.text}
                 </Link>
+              )}
+
+              {/* Dropdown for Blogs */}
+              {isBlogsDropdownOpen && link.text === "Blogs" && (
+                <div className="absolute bg-white shadow-lg mt-1 rounded-lg py-2 w-35 z-10 left-0">
+                  <Link
+                    href="/admin/blogs/view"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    View Blogs
+                  </Link>
+                  <Link
+                    href="/admin/blogs/list"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    List Blogs
+                  </Link>
+                  <Link
+                    href="/admin/blogs/comment"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    List Comment
+                  </Link>
+                </div>
+              )}
+
+              {isMessageDropdownOpen && link.text === "Message" && (
+                <div className="absolute bg-white shadow-lg mt-1 rounded-lg py-2 w-35 z-10 left-0">
+                  <Link
+                    href="/admin/message/list"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    List Message
+                  </Link>
+                  <Link
+                    href="/admin/message/form"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    Form Message
+                  </Link>
+                </div>
               )}
             </div>
           ))}

@@ -37,7 +37,7 @@ export default function AdminBlogs() {
 
   const onSeeMore = (id) => {
     // Arahkan ke halaman form untuk mengedit item berdasarkan ID
-    router.push(`/blogs/${id}`);
+    router.push(`/admin/blogs/view/${id}`);
   };
 
   return (

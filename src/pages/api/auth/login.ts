@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     return res.status(400).json({ message: "Password is required" });
                 }
 
-                // Fetch user from the database
+                // Fetch user from the database (including user_type)
                 const user = await db.collection("user_gebby").findOne({ email });
 
                 if (!user) {
@@ -40,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     id: user._id,
                     email: user.email,
                     name: user.name,
+                    user_type: user.user_type, // Include user_type
                 };
 
                 // Set the cookie (make sure to set options for better security)
@@ -53,8 +54,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     sameSite: 'strict', // Enhances CSRF protection
                 });
 
-                // Respond with success
-                return res.status(200).json({ message: "Login successful" });
+                // Respond with success, including user_type
+                return res.status(200).json({
+                    message: "Login successfully",
+                    user_type: user.user_type, // Send user_type in the response
+                });
 
             } catch (err) {
                 console.error(err);
