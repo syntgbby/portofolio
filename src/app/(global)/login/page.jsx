@@ -3,19 +3,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import ConfigDialog from "@/components/ConfirmDialog";
+import Image from "next/image";
 
 export default function Login() {
   const router = useRouter();
-  const [modal, setModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
+  // const [modal, setModal] = useState(false);
+  // const [modalTitle, setModalTitle] = useState("");
+  // const [modalMessage, setModalMessage] = useState("");
 
   // State untuk data form dan error message
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   // Handler untuk mengatasi perubahan input
   const inputHandler = (e) => {
@@ -27,21 +28,21 @@ export default function Login() {
     router.push("/");
   };
 
-  const clearForm = () => {
-    setData({
-      title: "",
-      subTitle: "",
-      content: "",
-      id: "",
-    });
-  };
+  // const clearForm = () => {
+  //   setData({
+  //     title: "",
+  //     subTitle: "",
+  //     content: "",
+  //     id: "",
+  //   });
+  // };
 
-  const onCancel = () => {
-    setModal(false);
-    setModalTitle("");
-    setModalMessage("");
-    clearForm(); // Clear form data on cancel
-  };
+  // const onCancel = () => {
+  //   setModal(false);
+  //   setModalTitle("");
+  //   setModalMessage("");
+  //   clearForm(); // Clear form data on cancel
+  // };
 
   // Handler untuk tombol "Sign Up"
   const onSignUp = () => {
@@ -69,21 +70,22 @@ export default function Login() {
           router.push("/admin");
         } else if (userType === "MBR") {
           router.push("/public");
-        } else {
-          setModal(true);
-          setModalTitle("Error");
-          setModalMessage("Unexpected user type");
         }
+        // else {
+        //   setModal(true);
+        //   setModalTitle("Error");
+        //   setModalMessage("Unexpected user type");
+        // }
       } else {
         const response = await res.json();
         // Handle error response
-        setError(response.message || "Login failed, please try again.");
+        // setError(response.message || "Login failed, please try again.");
       }
     } catch (err) {
       console.error("Error:", err.message);
-      setModal(true);
-      setModalTitle("Error");
-      setModalMessage(err.message);
+      // setModal(true);
+      // setModalTitle("Error");
+      // setModalMessage(err.message);
     }
   };
 
@@ -91,7 +93,7 @@ export default function Login() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
+          <Image
             alt="Your Company"
             src="/logo.png"
             width={90}
@@ -104,7 +106,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={onSubmitLogin} className="space-y-6">
+          <form action="" method="POST" className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -156,11 +158,12 @@ export default function Login() {
             </div>
 
             {/* Menampilkan pesan error jika login gagal */}
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
 
             <div>
               <button
                 type="submit"
+                onClick={onSubmitLogin}
                 className="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
               >
                 Sign in
@@ -169,7 +172,7 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <a
               href="#"
               className="font-semibold leading-6 text-rose-600 hover:text-rose-500"
@@ -189,7 +192,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <ConfigDialog
+      {/* <ConfigDialog
         onOkOnly={onCancel}
         showDialog={modal}
         title={modalTitle}
@@ -197,7 +200,7 @@ export default function Login() {
         onCancel={onCancel}
         onOk={onCancel}
         isOkOnly={true}
-      />
+      /> */}
     </>
   );
 }

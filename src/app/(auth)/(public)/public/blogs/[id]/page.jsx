@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import ConfigDialog from "../../../../../../components/ConfirmDialog";
-import CommentSection from "./component/comment"; // Import CommentSection
+// import CommentSection from "./component/comment"; // Import CommentSection
 
 export default function SeeBlogs() {
   const router = useRouter();
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const [commentList, setCommentList] = useState([]); // Add state for comment list
+  // const [commentList, setCommentList] = useState([]); // Add state for comment list
 
   const [data, setData] = useState({
     title: "",
@@ -34,18 +34,18 @@ export default function SeeBlogs() {
   };
 
   // Load comment list
-  const loadCommentList = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/blogs/list-blogs/comments`); // Fetch comments for specific blog post
-      const data = await res.json();
-      setCommentList(data.data || []);
-    } catch (error) {
-      console.error("Failed to load comment list:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const loadCommentList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(`/api/blogs/list-blogs/comments`); // Fetch comments for specific blog post
+  //     const data = await res.json();
+  //     setCommentList(data.data || []);
+  //   } catch (error) {
+  //     console.error("Failed to load comment list:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // Show modal with title and message
   const showModal = (title, message) => {
@@ -58,12 +58,12 @@ export default function SeeBlogs() {
 
   const onOkOnly = () => {
     setModal(false);
-    router.push("/blogs");
+    router.push("/public/blogs");
   };
 
   useEffect(() => {
     fetchDataById();
-    loadCommentList(); // Fetch comments when the page loads
+    // loadCommentList(); // Fetch comments when the page loads
   }, [params.id]); // Ensure it re-fetches if the blog ID changes
 
   return (
@@ -95,11 +95,11 @@ export default function SeeBlogs() {
       </div>
 
       {/* Comment Section */}
-      <CommentSection
+      {/* <CommentSection
         blogId={params.id}
         commentList={commentList} // Pass the comment list to CommentSection
         loadCommentList={loadCommentList} // Reload comment list after adding a comment
-      />
+      /> */}
 
       {/* Modal for errors or success */}
       <ConfigDialog

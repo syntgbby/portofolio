@@ -117,6 +117,7 @@ export default function AdminBlogs({ onEditItem }) {
                 <th className="py-2 px-4 border-b">No</th>
                 <th className="py-2 px-4 border-b">Title</th>
                 <th className="py-2 px-4 border-b">Sub Title</th>
+                <th className="py-2 px-4 border-b">Category</th>
                 <th className="py-2 px-4 border-b">Content</th>
                 <th className="py-2 px-4 border-b">Action</th>
               </tr>
@@ -134,6 +135,9 @@ export default function AdminBlogs({ onEditItem }) {
                     <td className="py-2 px-4 border-b text-sm">{item.title}</td>
                     <td className="py-2 px-4 border-b text-sm">
                       {item.subTitle}
+                    </td>
+                    <td className="py-2 px-4 border-b text-sm">
+                      {item.category}
                     </td>
                     <td
                       className="py-2 px-4 border-b text-sm"

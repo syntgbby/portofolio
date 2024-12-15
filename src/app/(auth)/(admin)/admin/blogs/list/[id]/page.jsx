@@ -47,6 +47,13 @@ export default function EditBlogs() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  const optCategory = [
+    { label: "ReactJS", value: "ReactJS" },
+    { label: "PHP Programming", value: "PHP Programming" },
+    { label: "VueJS", value: "VueJS" },
+    { label: "React Native", value: "React Native" },
+  ];
+
   const onSubmitData = async () => {
     try {
       if (editorRef.current) {
@@ -112,6 +119,24 @@ export default function EditBlogs() {
                   onChange={inputHandler}
                   placeholder="Enter blog sub title"
                 />
+              </div>
+
+              {/* Category */}
+              <div className="row mb-5">
+                <label className="font-bold">Category *</label>
+                <select
+                  name="employmentType"
+                  onChange={inputHandler}
+                  className="bg-white border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                  value={data.category}
+                >
+                  <option value="">Please Select</option>
+                  {optCategory.map((item, key) => (
+                    <option key={key} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Content */}

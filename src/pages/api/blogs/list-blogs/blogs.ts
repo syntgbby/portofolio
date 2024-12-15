@@ -1,8 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import clientPromise from '../../../lib/mongodb';
-import { ObjectId } from 'mongodb';
+import type { NextApiRequest, NextApiResponse } from "next";
+import clientPromise from "../../../../lib/mongodb";
+import { ObjectId } from "mongodb";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_NAME);
@@ -17,11 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           // Validate incoming data
           if (typeof body !== "object" || Array.isArray(body)) {
-            throw new Error('Invalid request format');
+            throw new Error("Invalid request format");
           }
 
           // Insert data into the database
-          const myBlog = await db.collection("com_blogs_gebby").insertOne(body);
+          const myBlog = await db.collection("blogs_gebby").insertOne(body);
           res.status(201).json({ data: myBlog });
         } catch (err) {
           console.error("Error in POST request:", err);
@@ -29,16 +32,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         break;
 
-        case "GET":
-          try {
-            const allPosts = await db.collection("com_blogs_gebby").find({}).toArray();
-            res.status(200).json({ data: allPosts });
-          } catch (err) {
-            console.error("Error in GET request:", err);
-            res.status(500).json({ message: "Failed to fetch data", error: err.message });
-          }
-          break;
-        
+      case "GET":
+        try {
+          const allPosts = await db
+            .collection("blogs_gebby")
+            .find({})
+            .toArray();
+          res.status(200).json({ data: allPosts });
+        } catch (err) {
+          console.error("Error in GET request:", err);
+          res
+            .status(500)
+            .json({ message: "Failed to fetch data", error: err.message });
+        }
+        break;
 
       case "DELETE":
         try {
@@ -46,7 +53,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: "Invalid ID" });
           }
 
-          const result = await db.collection("com_blogs_gebby").deleteOne({ _id: new ObjectId(id) });
+          const result = await db
+            .collection("blogs_gebby")
+            .deleteOne({ _id: new ObjectId(id) });
 
           if (result.deletedCount === 0) {
             return res.status(404).json({ message: "Entry not found" });
@@ -60,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         break;
 
       default:
-        res.setHeader('Allow', ['POST', 'GET', 'DELETE']);
+        res.setHeader("Allow", ["POST", "GET", "DELETE"]);
         res.status(405).end(`Method ${method} Not Allowed`);
         break;
     }

@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Card from "../../../../../components/card";
-import WorkList from "../../../../../components/comment-list";
+import WorkList from "./component/work-list";
 
 export default function AdminWork() {
   const router = useRouter();

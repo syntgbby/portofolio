@@ -25,7 +25,7 @@ export default function Home() {
             </h1>
             <h1 className="text-4xl font-serif text-black dark:text-white mt-4">
               This is <span className="text-red-700 mb-4">Gebby Syntia</span>
-              &apos;s <br /> Portfolio
+              <br /> Portfolio
             </h1>
             {/* Button to About Me */}
             <Link href="/about">

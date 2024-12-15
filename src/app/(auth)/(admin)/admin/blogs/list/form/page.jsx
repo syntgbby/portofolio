@@ -14,8 +14,8 @@ export default function AdminBlogsForm() {
   const [formData, setFormData] = useState({
     title: "",
     subTitle: "",
+    category: "",
     content: "",
-    id: "", // Make sure this exists if you're editing a blog
   });
 
   // Clear form data after submission or cancellation
@@ -23,10 +23,17 @@ export default function AdminBlogsForm() {
     setFormData({
       title: "",
       subTitle: "",
+      category: "",
       content: "",
-      id: "",
     });
   };
+
+  const optCategory = [
+    { label: "ReactJS", value: "ReactJS" },
+    { label: "PHP Programming", value: "PHP Programming" },
+    { label: "VueJS", value: "VueJS" },
+    { label: "React Native", value: "React Native" },
+  ];
 
   // Handle input changes
   const inputHandler = (e) => {
@@ -90,7 +97,7 @@ export default function AdminBlogsForm() {
         <div className="md:w-3/4">
           <div className="bg-white-800 dark:bg-black dark:text-white p-5 rounded-xl">
             <h3 className="text-xl py-2">
-              <b>{formData.id ? "Edit Blog" : "Add Blog"}</b>
+              <b>{formData._id ? "Edit Blog" : "Add Blog"}</b>
             </h3>
             <p className="text-red-400">*indicates required</p>
             <Card title="Blog Form" className="mb-5">
@@ -118,6 +125,24 @@ export default function AdminBlogsForm() {
                   onChange={inputHandler}
                   placeholder="Enter blog sub title"
                 />
+              </div>
+
+              {/* Category */}
+              <div className="row mb-5">
+                <label className="font-bold">Category *</label>
+                <select
+                  name="category"
+                  onChange={inputHandler}
+                  className="bg-white border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                  value={formData.category}
+                >
+                  <option value="">Please Select</option>
+                  {optCategory.map((item, key) => (
+                    <option key={key} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Content */}

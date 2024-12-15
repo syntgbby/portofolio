@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button"; // Ensure this is the correct import path
 // import ConfirmRegisterDialog from '@/components/ConfirmRegisterDialog'; // Update the path as needed
+import Image from "next/image";
 
 export default function Register() {
   const [data, setData] = useState({
@@ -34,7 +35,7 @@ export default function Register() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
+          <Image
             alt="Your Company"
             src="/logo.png"
             width={90}

@@ -3,17 +3,21 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import ConfigDialog from "../../../../../../../components/ConfirmDialog";
+// import CommentSection from "./component/comment"; // Import CommentSection
 
 export default function SeeBlogs() {
   const router = useRouter();
   const params = useParams();
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
+  // const [commentList, setCommentList] = useState([]); // Add state for comment list
 
   const [data, setData] = useState({
+    _id: "",
     title: "",
     subTitle: "",
     content: "",
-    _id: "",
   });
+
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalMessage, setModalMessage] = useState("");
@@ -21,17 +25,30 @@ export default function SeeBlogs() {
   // Fetch blog data by ID
   const fetchDataById = async () => {
     try {
-      const res = await fetch(`/api/blogs/list-blogs/${params.id}`, {
-        method: "GET",
-      });
-
+      const res = await fetch(`/api/blogs/list-view/${params.id}`); // Fetch blog data
       const responseData = await res.json();
       setData(responseData.data);
+      setLoading(false); // Set loading to false after data is fetched
     } catch (err) {
       console.error("Error:", err.message);
       showModal("Error", err.message);
+      setLoading(false); // Set loading to false even on error
     }
   };
+
+  // Load comment list
+  // const loadCommentList = async () => {
+  //   setLoading(true); // Start loading for comments
+  //   try {
+  //     const res = await fetch(`/api/blogs/list-view/comments`); // Fetch comments for specific blog post
+  //     const data = await res.json();
+  //     setCommentList(data.data || []); // Update comment list state
+  //   } catch (error) {
+  //     console.error("Failed to load comment list:", error);
+  //   } finally {
+  //     setLoading(false); // Stop loading after comments are loaded
+  //   }
+  // };
 
   // Show modal with title and message
   const showModal = (title, message) => {
@@ -44,12 +61,17 @@ export default function SeeBlogs() {
 
   const onOkOnly = () => {
     setModal(false);
-    router.push("/blogs");
+    router.push("/admin/blogs/view");
   };
 
   useEffect(() => {
     fetchDataById();
-  }, []);
+    // loadCommentList(); // Fetch comments when the page loads
+  }, [params.id]); // Ensure it re-fetches if the blog ID changes
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading indicator while fetching data
+  }
 
   return (
     <>
@@ -78,6 +100,13 @@ export default function SeeBlogs() {
           </div>
         </div>
       </div>
+
+      {/* Comment Section */}
+      {/* <CommentSection
+        blogId={params.id}
+        commentList={commentList} // Pass the comment list to CommentSection
+        loadCommentList={loadCommentList} // Reload comment list after adding a comment
+      /> */}
 
       {/* Modal for errors or success */}
       <ConfigDialog

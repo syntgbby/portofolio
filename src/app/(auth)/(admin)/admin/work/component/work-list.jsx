@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function WorkList({ onEditItem: editItemProp }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); // Assuming `data` is an array of objects
   const [deleteId, setDeleteId] = useState(null);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -41,7 +41,9 @@ export default function WorkList({ onEditItem: editItemProp }) {
 
   // Edit item (using prop method)
   const onEditHandler = (id) => {
-    editItemProp(id); // Call the prop function passed to this component
+    if (editItemProp) {
+      editItemProp(id); // Call the prop function passed to this component
+    }
   };
 
   // Cancel modal

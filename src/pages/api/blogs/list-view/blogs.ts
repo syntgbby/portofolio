@@ -24,7 +24,7 @@ export default async function handler(
           }
 
           // Insert data into the database
-          const myBlog = await db.collection("com_blogs_gebby").insertOne(body);
+          const myBlog = await db.collection("blogs_gebby").insertOne(body);
           res.status(201).json({ data: myBlog });
         } catch (err) {
           console.error("Error in POST request:", err);
@@ -35,7 +35,7 @@ export default async function handler(
       case "GET":
         try {
           const allPosts = await db
-            .collection("com_blogs_gebby")
+            .collection("blogs_gebby")
             .find({})
             .toArray();
           res.status(200).json({ data: allPosts });
@@ -54,7 +54,7 @@ export default async function handler(
           }
 
           const result = await db
-            .collection("com_blogs_gebby")
+            .collection("blogs_gebby")
             .deleteOne({ _id: new ObjectId(id) });
 
           if (result.deletedCount === 0) {
