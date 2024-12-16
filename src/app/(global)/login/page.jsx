@@ -39,16 +39,21 @@ export default function Login() {
         method: "POST",
         body: JSON.stringify(data),
       });
+      console.log(res);
 
       if (res.ok) {
         const responseData = await res.json();
-        const userType = responseData.user_type;
+        // console.log(responseData);
+        
+        const userType = responseData.data.user_type;
+        // console.log(userType);
+        
         if (userType === "ADM") {
           router.push("/admin-page");
         } else if (userType === "MBR") {
           router.push("/public");
         }
-        // toast.success("Login successfully");
+        toast.success("Login successfully");
       } else {
         const response = await res.json();
         // toast.error(response.message || "Login failed, please try again.");

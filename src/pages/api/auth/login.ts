@@ -1,63 +1,57 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next'
 import clientPromise from "../../../lib/mongodb";
-import { setCookie } from 'cookies-next';
-import { comparePassword, encrypt } from "../../../lib/session";
+import { setCookie  } from 'cookies-next';
+import { comparePassword, encrypt} from "../../../lib/session"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
+export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_NAME);
 
     switch (req.method) {
         case "POST":
-            try {
-                // Parse and validate the incoming body
-                const body = JSON.parse(req.body);
-                const { email, password } = body;
+            try{
+                let tokenData={};
+                let token='';
+                
+                const body = JSON.parse(req.body)
 
-                // Fetch user from the database (including user_type)
-                const user = await db.collection("user_gebby").findOne({ email });
-
-                if (!user) {
-                    return res.status(400).json({ message: "Invalid email or password" });
+                if( body.email == ""){
+                    throw new Error('email is required')
                 }
 
-                // Compare the password with the hashed password in the database
-                const isPasswordValid = await comparePassword(password, user.password);
-                if (!isPasswordValid) {
-                    return res.status(400).json({ message: "Invalid email or password" });
+                if( body.password == ""){
+                    throw new Error('password is required')
                 }
 
-                // Create token data to store in the cookie
-                const tokenData = {
-                    id: user._id,
-                    email: user.email,
-                    name: user.name,
-                    user_type: user.user_type, // Include user_type
-                };
+                const users = await db.collection("user_gebby")
+                    .find({email: body.email }).toArray(); 
 
-                // Set the cookie (make sure to set options for better security)
-                const token = await encrypt(tokenData);
-                setCookie(`${process.env.AUTH_COOKIE_NAME}`, token, {
-                    req, 
-                    res, 
-                    maxAge: 60 * 6 * 24, // 6 days
-                    httpOnly: true, // Security: prevents JS access to cookies
-                    secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-                    sameSite: 'strict', // Enhances CSRF protection
+                if( users.length > 0 && await comparePassword(body.password, users[0].password )){
+                     tokenData = {
+                        id:users[0]._id,
+                        email:users[0].email,
+                        name:users[0].name,
+                        user_type: users[0].user_type,
+                    }
+                    token =await encrypt(tokenData);
+                    setCookie(`${process.env.AUTH_COOKIE_NAME}`, token, { req, res, maxAge: 60 * 6 * 24 });
+                }else{
+                    throw new Error('invalid username and password')
+                }
+                
+
+                res.status(200).json({
+                    message: 'login berhasil', 
+                    data: tokenData,
+                    token:token
                 });
-
-                // Respond with success, including user_type
-                return res.status(200).json({
-                    message: "Login successfully",
-                    user_type: user.user_type, // Send user_type in the response
-                });
-
-            } catch (err) {
-                console.error(err);
-                return res.status(500).json({ message: "Internal server error" });
+            }catch(err){
+                res.status(422).json({ message: err.message});
             }
-
+            break;
         default:
-            return res.status(405).json({ message: "Method Not Allowed" });
+            res.status(404).json({message: "page not found"});
+        break;
     }
 }

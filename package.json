@@ -23,7 +23,7 @@
     "dompurify": "^3.2.2",
     "jose": "^5.9.6",
     "lucide-react": "^0.446.0",
-    "mongodb": "^6.9.0",
+    "mongodb": "^6.12.0",
     "mongoose": "^8.9.0",
     "next": "^15.1.0",
     "next-auth": "^4.24.10",
@@ -38,6 +38,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "22.5.4",
     "@types/react": "18.3.5",
     "eslint": "^8",
