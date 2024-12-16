@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import ConfigDialog from "@/components/ConfirmDialog";
 import Image from "next/image";
-// import { Toaster, toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
@@ -56,18 +56,18 @@ export default function Login() {
         toast.success("Login successfully");
       } else {
         const response = await res.json();
-        // toast.error(response.message || "Login failed, please try again.");
+        toast.error(response.message || "Login failed, please try again.");
       }
     } catch (err) {
       console.error("Error:", err.message);
-      // toast.error(err.message || "Login failed, please try again.");
+      toast.error(err.message || "Login failed, please try again.");
     }
   };
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        {/* <Toaster /> */}
+        <Toaster />
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
             alt="Your Company"
