@@ -3,7 +3,6 @@
 import { useState } from "react"; // Import useState for dropdown control
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import { useRouter } from "next/navigation"; // Correctly call useRouter
@@ -43,24 +42,24 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   // Navigation links and their respective actions
   const links = [
     {
-      path: "#", // Placeholder for Blogs
+      path: "/admin-page/message", // Placeholder for Blogs
       text: "Message",
       onMouseEnter: () => setIsMessageDropdownOpen(true), // Open dropdown on hover
       onMouseLeave: () => setIsMessageDropdownOpen(false), // Close dropdown when mouse leaves
     },
     {
-      path: "/admin/work",
+      path: "/admin-page/work",
       text: "Work",
     },
     {
-      path: "#", // Placeholder for Blogs
+      path: "/admin-page/blogs", // Placeholder for Blogs
       text: "Blogs",
       onMouseEnter: () => setIsBlogsDropdownOpen(true), // Open dropdown on hover
       onMouseLeave: () => setIsBlogsDropdownOpen(false), // Close dropdown when mouse leaves
     },
     {
       path: "#", // Placeholder path for logout
-      text: "Log Out",
+      text: "Logout",
       onClick: onLogOut, // Assign the logout function
     },
   ];
@@ -79,8 +78,8 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
             <Image
               src="/logo.png"
               alt="Logo"
-              width={100}
-              height={100}
+              width={90}
+              height={90}
               className="justify-center"
             />
           </Link>
@@ -125,22 +124,16 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
               {isBlogsDropdownOpen && link.text === "Blogs" && (
                 <div className="absolute bg-white shadow-lg mt-1 rounded-lg py-2 w-35 z-10 left-0">
                   <Link
-                    href="/admin/blogs/view"
+                    href="/admin-page/blogs/list"
+                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
+                  >
+                    List Blogs & Comments
+                  </Link>
+                  <Link
+                    href="/admin-page/blogs/view"
                     className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
                   >
                     View Blogs
-                  </Link>
-                  <Link
-                    href="/admin/blogs/list"
-                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
-                  >
-                    List Blogs
-                  </Link>
-                  <Link
-                    href="/admin/blogs/comment"
-                    className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
-                  >
-                    List Comment
                   </Link>
                 </div>
               )}
@@ -148,13 +141,13 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
               {isMessageDropdownOpen && link.text === "Message" && (
                 <div className="absolute bg-white shadow-lg mt-1 rounded-lg py-2 w-35 z-10 left-0">
                   <Link
-                    href="/admin/message/list"
+                    href="/admin-page/message/list"
                     className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
                   >
                     List Message
                   </Link>
                   <Link
-                    href="/admin/message/form"
+                    href="/admin-page/message/form"
                     className="block px-2 py-2 text-gray-800 hover:bg-gray-100 text-sm"
                   >
                     Form Message
@@ -165,8 +158,6 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
           ))}
         </div>
 
-        {/* Theme switcher */}
-        <ThemeSwitcher />
       </nav>
     </div>
   );

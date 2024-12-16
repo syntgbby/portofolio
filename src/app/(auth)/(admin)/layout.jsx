@@ -5,7 +5,6 @@ import "./globals.css";
 import { useState } from "react";
 import Navbar from "@/components/nav/nav-admin";
 import Sidebar from "@/components/sidebar/sidebar-admin";
-import { ThemeProvider } from "@/components/theme-provider";
 import { ViewTransitions } from 'next-view-transitions'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,7 +24,6 @@ export default function RootLayout({ children }) {
   return (
     <ViewTransitions>
       <div className={inter.className}>
-      <ThemeProvider attribute="class" disableTransitionOnChange>
         <div className="relative bg-grey-200">
           <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
           <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
@@ -44,7 +42,6 @@ export default function RootLayout({ children }) {
             <main className="max-w-12xxl mx-auto">{children}</main>
           </div>
           </div>
-        </ThemeProvider>
       </div>
     </ViewTransitions>
   );

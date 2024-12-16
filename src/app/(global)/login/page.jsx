@@ -4,19 +4,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import ConfigDialog from "@/components/ConfirmDialog";
 import Image from "next/image";
+import { Toaster, toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
-  // const [modal, setModal] = useState(false);
-  // const [modalTitle, setModalTitle] = useState("");
-  // const [modalMessage, setModalMessage] = useState("");
 
   // State untuk data form dan error message
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-  // const [error, setError] = useState("");
 
   // Handler untuk mengatasi perubahan input
   const inputHandler = (e) => {
@@ -28,22 +25,6 @@ export default function Login() {
     router.push("/");
   };
 
-  // const clearForm = () => {
-  //   setData({
-  //     title: "",
-  //     subTitle: "",
-  //     content: "",
-  //     id: "",
-  //   });
-  // };
-
-  // const onCancel = () => {
-  //   setModal(false);
-  //   setModalTitle("");
-  //   setModalMessage("");
-  //   clearForm(); // Clear form data on cancel
-  // };
-
   // Handler untuk tombol "Sign Up"
   const onSignUp = () => {
     router.push("/register");
@@ -51,7 +32,7 @@ export default function Login() {
 
   // Handler untuk form submit
   const onSubmitLogin = async (e) => {
-    e.preventDefault(); // Prevent page reload on submit
+    e.preventDefault();
 
     try {
       const res = await fetch(`/api/auth/login`, {
@@ -61,37 +42,27 @@ export default function Login() {
 
       if (res.status === 200) {
         const responseData = await res.json();
-
-        // Assuming the response contains the user_type
         const userType = responseData.user_type;
-
-        // Conditional routing based on user_type
         if (userType === "ADM") {
-          router.push("/admin");
+          router.push("/admin-page");
         } else if (userType === "MBR") {
           router.push("/public");
         }
-        // else {
-        //   setModal(true);
-        //   setModalTitle("Error");
-        //   setModalMessage("Unexpected user type");
-        // }
+        toast.success("Login successfully");
       } else {
         const response = await res.json();
-        // Handle error response
-        // setError(response.message || "Login failed, please try again.");
+        toast.error(response.message || "Login failed, please try again.");
       }
     } catch (err) {
       console.error("Error:", err.message);
-      // setModal(true);
-      // setModalTitle("Error");
-      // setModalMessage(err.message);
+      toast.error(err.message || "Login failed, please try again.");
     }
   };
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <Toaster />
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
             alt="Your Company"
@@ -135,14 +106,14 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a
                     href="#"
                     className="font-semibold text-rose-500 hover:text-rose-400"
                   >
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2">
                 <input
@@ -156,9 +127,6 @@ export default function Login() {
                 />
               </div>
             </div>
-
-            {/* Menampilkan pesan error jika login gagal */}
-            {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
 
             <div>
               <button
@@ -184,7 +152,7 @@ export default function Login() {
 
           <div className="mt-3">
             <Button
-              className="mt-3 px-6 py-1 dark:bg-rose-400 dark:hover:bg-rose-500"
+              className="mt-3 px-6 py-1 bg-rose-400 hover:bg-rose-500"
               onClick={onBack}
             >
               Back

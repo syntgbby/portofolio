@@ -16,8 +16,8 @@ function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
                     <ChevronRight onClick={toggleSidebar}/>
                     </div>
                 </div>
-                <li><a href="/about">About</a></li>
-                <li><a href="/form-message/work">Work Experience</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
             </ul>
         </aside>
     );

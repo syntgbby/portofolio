@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 export default function SeeBlog() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ const fetchComments = async () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.name || !newComment.comment) {
-      alert("Name and comment are required");
+      toast.error("Name, Email, and Comment is required")
       return;
     }
     try {
@@ -62,6 +63,7 @@ const fetchComments = async () => {
       console.log("Response from API:", response);  // Add this line to see the response
   
       setNewComment({ name: "", email: "", comment: "" }); // Clear form
+      toast.success("Comment Successfully Added")
       fetchComments(); // Refresh comments
     } catch (err) {
       console.error("Error submitting comment:", err.message);
@@ -79,6 +81,7 @@ const fetchComments = async () => {
 
   return (
     <div className="flex flex-col mt-40 justify-center items-center">
+      <Toaster />
       <div className="md:w-3/4 mb-10">
         <div className=" bg-rose-50 p-5 rounded-xl">
           <h3 className="text-3xl font-semibold py-2 text-center">{data.title}</h3>

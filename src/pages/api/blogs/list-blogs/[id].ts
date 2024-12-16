@@ -33,30 +33,15 @@ export default async function handler(
         break;
 
       case "PUT":
-        const body = req.body;
-
-        // Ensure the body is properly parsed and has required fields
-        if (
-          !body.title ||
-          !body.employmentType ||
-          !body.company ||
-          !body.location ||
-          !body.startDate ||
-          !body.endDate
-        ) {
-          return res
-            .status(400)
-            .json({ message: "Invalid or missing fields in request body" });
-        }
-
+        const body = JSON.parse(req.body);
+        const filter = { _id: id};
+        
         const updateDoc = {
           $set: {
             title: body.title,
-            employmentType: body.employmentType,
-            company: body.company,
-            location: body.location,
-            startDate: body.startDate,
-            endDate: body.endDate,
+            category: body.category,
+            subTitle: body.subTitle,
+            content: body.content,
           },
         };
 
@@ -65,6 +50,27 @@ export default async function handler(
           .updateOne({ _id: objectId }, updateDoc, { upsert: true });
 
         res.status(200).json({ message: "Data successfully updated" });
+        break;
+
+        case "DELETE":
+        try {
+          if (!id || Array.isArray(id)) {
+            return res.status(400).json({ message: "Invalid ID" });
+          }
+
+          const result = await db
+            .collection("blogs_gebby")
+            .deleteOne({ _id: new ObjectId(id) });
+
+          if (result.deletedCount === 0) {
+            return res.status(404).json({ message: "Entry not found" });
+          }
+
+          res.status(204).end(); // No content
+        } catch (err) {
+          console.error("Error in DELETE request:", err);
+          res.status(500).json({ message: "Failed to delete entry" });
+        }
         break;
 
       default:

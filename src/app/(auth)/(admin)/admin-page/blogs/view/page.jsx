@@ -38,7 +38,7 @@ export default function AdminBlogs() {
 
   const onSeeMore = (id) => {
     // Navigate to the edit form page based on the item's ID
-    router.push(`/blogs/${id}`);
+    router.push(`/admin-page/blogs/view/${id}`);
   };
 
   // Filter blogs based on the search query
@@ -48,6 +48,7 @@ export default function AdminBlogs() {
       item.subTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   return (
     <div className="mt-28 p-4">
       <h2 className="text-2xl font-bold mb-6 text-center pt-10 dark:text-white">

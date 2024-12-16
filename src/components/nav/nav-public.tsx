@@ -3,7 +3,6 @@
 import { Link } from "next-view-transitions";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 
@@ -45,7 +44,7 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
     },
     {
       path: "#", // Placeholder path for logout
-      text: "Log Out",
+      text: "Logout",
       onClick: onLogOut, // Assign the logout function
     },
   ];
@@ -61,8 +60,8 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
             <Image
               src="/logo.png"
               alt="Logo"
-              width={100}
-              height={100}
+              width={90}
+              height={90}
               className="justify-center"
             />
           </a>
@@ -86,7 +85,6 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
             </div>
           );
         })}
-        <ThemeSwitcher />
       </nav>
     </div>
   );

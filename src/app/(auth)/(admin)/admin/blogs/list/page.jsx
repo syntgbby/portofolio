@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import ConfigDialog from "../../../../../../components/ConfirmDialog";
 import DOMPurify from "dompurify"; // Import DOMPurify for sanitizing HTML
 
-export default function AdminBlogs({ onEditItem }) {
+export default function AdminBlogs() {
   const router = useRouter();
 
   const [data, setData] = useState([]);

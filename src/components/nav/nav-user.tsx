@@ -3,7 +3,6 @@
 import { Link } from "next-view-transitions";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { ThemeSwitcher } from "../theme-switcher";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 
@@ -19,9 +18,6 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
   const Login = () => {
     router.push("/login");
   };
-  const Register = () => {
-    router.push("/register");
-  };
   const Blogs = () => {
     router.push("/blogs");
   };
@@ -32,9 +28,9 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
       onClick: Login,
     },
     {
-      path: "/register",
-      text: "Register",
-      onClick: Register,
+      path: "/blogs",
+      text: "Blogs",
+      onClick: Blogs,
     },
   ];
 
@@ -49,8 +45,8 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
             <Image
               src="/logo.png"
               alt="Logo"
-              width={100}
-              height={100}
+              width={90}
+              height={90}
               className="justify-center"
             />
           </a>
@@ -74,7 +70,6 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
             </div>
           );
         })}
-        <ThemeSwitcher />
       </nav>
     </div>
   );
