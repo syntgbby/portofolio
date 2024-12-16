@@ -14,14 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const body = JSON.parse(req.body);
                 const { email, password } = body;
 
-                if (!email || email === "") {
-                    return res.status(400).json({ message: "Email is required" });
-                }
-
-                if (!password || password === "") {
-                    return res.status(400).json({ message: "Password is required" });
-                }
-
                 // Fetch user from the database (including user_type)
                 const user = await db.collection("user_gebby").findOne({ email });
 

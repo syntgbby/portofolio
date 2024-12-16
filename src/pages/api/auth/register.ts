@@ -15,6 +15,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                     name: body.name,
                     email:body.email,
                     password: hashPwd,
+                    user_type: body.user_type,
                 }
 
                 let user = await db.collection("user_gebby").insertOne(userData);
