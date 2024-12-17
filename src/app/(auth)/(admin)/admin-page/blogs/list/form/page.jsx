@@ -45,11 +45,11 @@ export default function AdminBlogsForm() {
   // Handle form submission (create or update)
   async function onSubmitData() {
     try {
-      if (editorRef.current) {
+      // if (editorRef.current) {
         // Ensure that content from the editor is added to the formData before submission
         const updatedFormData = {
           ...formData,
-          content: editorRef.current.getContent(), // Get the content from the editor
+          // content: editorRef.current.getContent(), // Get the content from the editor
         };
 
         const res = await fetch(`/api/blogs`, {
@@ -71,7 +71,7 @@ export default function AdminBlogsForm() {
         // Optionally clear the form after successful submission
         clearForm();
         router.push("/admin-page/blogs/list");
-      }
+      // }
     } catch (err) {
       console.error("Error:", err.message);
       toast.error("Error deleting entry");
@@ -145,7 +145,14 @@ export default function AdminBlogsForm() {
               {/* Content */}
               <div className="row mb-5">
                 <label className="font-bold">Content *</label>
-                <Editor
+                <textarea
+                  name="content"
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                  value={formData.content}
+                  onChange={inputHandler}
+                  placeholder="Enter blog content"
+                />
+                {/* <Editor
                   id="content"
                   apiKey="hz9os6h0p1826jcqknks4q1fm8yl9khctaa7nmexkf0rnx2e"
                   onInit={(_evt, editor) => (editorRef.current = editor)}
@@ -181,12 +188,13 @@ export default function AdminBlogsForm() {
                     content_style:
                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
-                />
+                /> */}
               </div>
 
               {/* Submit Button */}
               <div className="flex justify-end">
                 <button
+                  type="button"
                   onClick={onSubmitData}
                   className="mx-1 h-9 items-center justify-center px-4 rounded-md bg-amber-500"
                 >

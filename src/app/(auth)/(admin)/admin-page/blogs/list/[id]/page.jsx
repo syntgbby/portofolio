@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Card from "../../../../../../../components/card";
 import ConfigDialog from "../../../../../../../components/ConfirmDialog";
 import { Editor } from "@tinymce/tinymce-react";
+import { Toaster, toast } from "sonner";
 
 export default function EditBlogs() {
   const router = useRouter();
@@ -56,26 +57,25 @@ export default function EditBlogs() {
 
   const onSubmitData = async () => {
     try {
-      if (editorRef.current) {
+      // if (editorRef.current) {
         const body = { ...data };
-        body.content = editorRef.current.getContent();
+        // body.content = editorRef.current.getContent();
 
-        let res = await fetch(`/api/blogs/list-blogs/${data._id}`, {
+        let res = await fetch(`/api/blogs/${params.id}`, {
           method: "PUT",
           body: JSON.stringify(body),
         });
 
         let resData = await res.json();
-        setModal(true);
-        setModalTitle("Info");
-        setModalMessage(resData.message);
+        // setModal(true);
+        // setModalTitle("Info");
+        // setModalMessage(resData.message);
         router.push("/admin-page/blogs/list");
-      }
+        toast.success("Blog updated successfully");
+      // }
     } catch (err) {
       console.error("ERR", err.message);
-      setModal(true);
-      setModalTitle("Err");
-      setModalMessage(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -86,6 +86,7 @@ export default function EditBlogs() {
   return (
     <>
       <div className="flex mt-20 justify-center">
+        <Toaster />
         <div className="md:w-3/4">
           <div className="bg-white-800 dark:bg-black dark:text-white p-5 rounded-xl">
             <h3 className="text-xl py-2">
@@ -140,7 +141,14 @@ export default function EditBlogs() {
               {/* Content */}
               <div className="row mb-5">
                 <label className="font-bold">Content *</label>
-                <Editor
+                <textarea
+                  name="content"
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                  value={data.content}
+                  onChange={inputHandler}
+                  placeholder="Enter blog content"
+                />
+                {/* <Editor
                   apiKey="hz9os6h0p1826jcqknks4q1fm8yl9khctaa7nmexkf0rnx2e"
                   onInit={(_evt, editor) => (editorRef.current = editor)}
                   initialValue={data.content || ""} // Ensure content is never undefined
@@ -175,12 +183,13 @@ export default function EditBlogs() {
                     content_style:
                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
-                />
+                /> */}
               </div>
 
               {/* Submit Button */}
               <div className="flex justify-end">
                 <button
+                  // type="button"
                   onClick={onSubmitData}
                   className="mx-1 h-9 items-center justify-center px-4 rounded-md bg-amber-500"
                 >
