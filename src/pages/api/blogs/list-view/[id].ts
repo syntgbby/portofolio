@@ -24,7 +24,7 @@ export default async function handler(
             title: body.title,
           },
         };
-        console.log("filter", filter);
+        // console.log("filter", filter);
         const blogs = await db
           .collection("blogs")
           .updateOne(filter, updateDoc, { upsert: true });

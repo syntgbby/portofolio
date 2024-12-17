@@ -7,12 +7,16 @@ import { comparePassword, encrypt} from "../../../lib/session"
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_NAME);
+    // console.log(db);
 
     switch (req.method) {
+        
         case "POST":
+            console.log(req);
             try{
                 let tokenData={};
                 let token='';
+                console.log(req.body);
                 
                 const body = JSON.parse(req.body)
 

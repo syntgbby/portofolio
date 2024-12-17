@@ -1,52 +1,56 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../lib/mongodb";
 import { ObjectId } from "mongodb";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { replycommentId: string } }
+export interface ReplyComment {
+  commentId: ObjectId;
+  reply: string;
+  date: Date;
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
   try {
-    const { reply } = await req.json(); // Extract 'reply' from the request body
-
-    if (!reply || reply.trim().length === 0) {
-      return NextResponse.json(
-        { success: false, message: "Reply cannot be empty" },
-        { status: 400 }
-      );
-    }
-
-    // Connect to the MongoDB database
+    // Parse request body
     const client = await clientPromise;
     const db = client.db();
 
-    const commentId = params.replycommentId; // Get the commentId from the URL params
+    if(req.method === "POST"){
+      const { reply, commentId } = req.body;
+      if (!reply || reply.trim().length === 0) {
+        return res.status(400).json({ success: false, message: "Reply cannot be empty" });
+      }
+      if (!commentId || !ObjectId.isValid(commentId)) {
+        return res.status(400).json({ success: false, message: "Invalid comment ID" });
+      }
 
-    // Update the comment by adding the reply to the 'replies' field
-    const result = await db.collection("reply-comments_gebby").insertOne(
-      {
+      const updateForm :ReplyComment = {
         commentId: commentId,
         reply: reply,
         date: new Date(),
       }
-    );
 
-    if (!result) {
-      return NextResponse.json(
-        { success: false, message: "Failed to add reply" },
-        { status: 500 }
-      );
+      const result = await db.collection("reply-comments_gebby").insertOne(updateForm);
+
+      if(!result.acknowledged){
+        return res.status(400).json({ success: false, message: "Failed to add reply" });
+      }
+
+      return res.status(200).json({ success: true, message: "Reply added successfully" });
+    } else if(req.method === "GET"){
+      const result = await db.collection("reply-comments_gebby").find({}).toArray();
+      return res.status(200).json({ success: true, data: result });
     }
 
-    return NextResponse.json(
-      { success: true, message: "Reply added successfully" },
-      { status: 200 }
-    );
   } catch (error) {
-    console.error("Error while replying to comment:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
+    // Log the error for debugging
+    console.error("Error while replying to comment:", {
+      message: error.message,
+      stack: error.stack,
+    });
+
+    return res.status(400).json({ success: false, message: "Reply cannot be empty" });
   }
 }

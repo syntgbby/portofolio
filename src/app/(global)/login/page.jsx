@@ -42,15 +42,7 @@ export default function Login() {
       });
 
       if (res.ok) {
-        const responseData = await res.json();
-        console.log(responseData);
-        
-        const userType = responseData.data.user_type;
-        // console.log(userType);
-        
-        if (res.ok){
-          router.push("/admin-page");
-        }
+        router.push("/admin-page");
         toast.success("Login successfully");
       } else {
         const response = await res.json();
@@ -141,7 +133,7 @@ export default function Login() {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          {/* <p className="mt-10 text-center text-sm text-gray-500">
             Dont have an account?{" "}
             <a
               href="#"
@@ -150,7 +142,7 @@ export default function Login() {
             >
               Sign Up
             </a>
-          </p>
+          </p> */}
 
           <div className="mt-3">
             <Button

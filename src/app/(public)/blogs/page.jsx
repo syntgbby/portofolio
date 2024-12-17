@@ -17,7 +17,7 @@ export default function AdminBlogs() {
   async function onLoadData() {
     setLoading(true);
     try {
-      const res = await fetch("/api/blogs/list-blogs/blogs");
+      const res = await fetch("/api/blogs");
       if (!res.ok) throw new Error("Failed to fetch data");
       const data = await res.json();
       setData(data.data);
@@ -48,6 +48,7 @@ export default function AdminBlogs() {
       item.subTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   return (
     <div className="mt-28 p-4">
       <h2 className="text-2xl font-bold mb-6 text-center pt-10 dark:text-white">

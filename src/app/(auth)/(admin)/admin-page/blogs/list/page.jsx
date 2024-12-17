@@ -136,37 +136,52 @@ export default function AdminBlogs() {
   };
 
   const handleReplySubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!replyText.trim()) {
-      alert("Reply cannot be empty");
-      return;
+  if (!replyText.trim()) {
+    alert("Reply cannot be empty");
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/reply-comment", { // Menggunakan URL tanpa parameter commentId
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reply: replyText, // Mengirim balasan
+        commentId: replyComment._id, // Mengirim commentId yang dipilih untuk balasan
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      toast.success("Reply added successfully!");
+      setReplyText(""); // Mengosongkan input balasan
+      setReplyComment(null); // Menutup form balasan
+
+      // Menambahkan balasan pada komentar
+      // setComments((prevComments) => {
+      //   return prevComments.map((item) => {
+      //     if (item._id === replyComment.blogId) { // Menggunakan blogId untuk mencocokkan blog
+      //       return {
+      //         ...item,
+      //         comments: [...item.comments, { reply: replyText, name: "Admin", date: new Date() }],
+      //       };
+      //     }
+      //     return item;
+      //   });
+      // });
+    } else {
+      toast.error("Error adding reply: " + result.message);
     }
-
-    const commentId = comment._id; // Ensure this is the correct comment ID
-
-    try {
-      const response = await fetch(`/api/reply-comment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ commentId: commentId, reply: replyText }), // Update this to send 'reply' instead of 'replyText'
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert("Reply added successfully!");
-        setReplyText(""); // Clear the reply input field
-      } else {
-        alert("Error adding reply: " + result.message);
-      }
-    } catch (error) {
-      console.error("Error while submitting reply:", error);
-      alert("Error submitting reply: " + error.message);
-    }
-  };
+  } catch (error) {
+    console.error("Error while submitting reply:", error);
+    toast.error("Error submitting reply: " + error.message);
+  }
+};
 
   return (
     <>
@@ -298,16 +313,22 @@ export default function AdminBlogs() {
                           {comment.comment}
                         </td>
                         <td className="py-2 px-4 border-b text-center">
-                          <div className="inline-flex text-[12px]">
+                          <div className="inline-flex gap-2 text-[12px]">
+                            <button
+                            onClick={() => onViewHandler(item._id)}
+                            className="bg-blue-300 hover:bg-blue-400 text-gray-800 py-2 px-4 rounded-md"
+                          >
+                            View
+                          </button>
                             <button
                             onClick={() => handleReplyClick(comment)}
-                            className="bg-green-300 hover:bg-green-400 text-gray-800 py-2 px-4 rounded-l"
+                            className="bg-green-300 hover:bg-green-400 text-gray-800 py-2 px-4 rounded-md"
                           >
                             Reply
                           </button>
                           <button
                             onClick={() => onDeleteCommentItem(comment._id)}
-                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-r"
+                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md"
                           >
                             Delete
                           </button>
