@@ -36,22 +36,20 @@ export default function Login() {
 
     try {
       const res = await fetch(`/api/auth/login`, {
+        // headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify(data),
       });
-      console.log(res);
 
       if (res.ok) {
         const responseData = await res.json();
-        // console.log(responseData);
+        console.log(responseData);
         
         const userType = responseData.data.user_type;
         // console.log(userType);
         
-        if (userType === "ADM") {
+        if (res.ok){
           router.push("/admin-page");
-        } else if (userType === "MBR") {
-          router.push("/public");
         }
         toast.success("Login successfully");
       } else {
@@ -82,7 +80,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="" method="POST" className="space-y-6">
+          <form onSubmit={onSubmitLogin} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -136,7 +134,6 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-                onClick={onSubmitLogin}
                 className="flex w-full justify-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600"
               >
                 Sign in

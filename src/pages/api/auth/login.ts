@@ -32,7 +32,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                         id:users[0]._id,
                         email:users[0].email,
                         name:users[0].name,
-                        user_type: users[0].user_type,
                     }
                     token =await encrypt(tokenData);
                     setCookie(`${process.env.AUTH_COOKIE_NAME}`, token, { req, res, maxAge: 60 * 6 * 24 });

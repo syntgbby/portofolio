@@ -41,16 +41,16 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
 
   // Navigation links and their respective actions
   const links = [
-    {
-      path: "/admin-page/message", // Placeholder for Blogs
-      text: "Message",
-      onMouseEnter: () => setIsMessageDropdownOpen(true), // Open dropdown on hover
-      onMouseLeave: () => setIsMessageDropdownOpen(false), // Close dropdown when mouse leaves
-    },
-    {
-      path: "/admin-page/work",
-      text: "Work",
-    },
+    // {
+    //   path: "/admin-page/message", // Placeholder for Blogs
+    //   text: "Message",
+    //   onMouseEnter: () => setIsMessageDropdownOpen(true), // Open dropdown on hover
+    //   onMouseLeave: () => setIsMessageDropdownOpen(false), // Close dropdown when mouse leaves
+    // },
+    // {
+    //   path: "/admin-page/work",
+    //   text: "Work",
+    // },
     {
       path: "/admin-page/blogs", // Placeholder for Blogs
       text: "Blogs",
