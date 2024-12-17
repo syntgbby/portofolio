@@ -52,13 +52,13 @@ export default function Navbar({ isOpen, toggleSidebar }: NavProps) {
     //   text: "Work",
     // },
     {
-      path: "/admin-page/blogs", // Placeholder for Blogs
+      path: "#", // Placeholder for Blogs
       text: "Blogs",
       onMouseEnter: () => setIsBlogsDropdownOpen(true), // Open dropdown on hover
       onMouseLeave: () => setIsBlogsDropdownOpen(false), // Close dropdown when mouse leaves
     },
     {
-      path: "#", // Placeholder path for logout
+      path: "", // Placeholder path for logout
       text: "Logout",
       onClick: onLogOut, // Assign the logout function
     },
