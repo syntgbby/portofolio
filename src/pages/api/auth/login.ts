@@ -3,7 +3,6 @@ import clientPromise from "../../../lib/mongodb";
 import { setCookie  } from 'cookies-next';
 import { comparePassword, encrypt} from "../../../lib/session"
 
-
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_NAME);

@@ -101,9 +101,9 @@ export default function SeeBlog() {
   }
 
   return (
-    <div className="flex flex-col mt-40 justify-center items-center">
+    <div className="flex flex-col mt-40 justify-center items-center md:3/3">
       <Toaster />
-      <div className="md:w-3/4 mb-10">
+      <div className="md:w-1/4 mb-10">
         <div className=" bg-rose-50 p-5 rounded-xl">
           <h3 className="text-3xl font-semibold py-2 text-center">{data.title}</h3>
           <p className="text-lg text-gray-600 text-center mb-4">{data.subTitle}</p>
@@ -112,7 +112,7 @@ export default function SeeBlog() {
       </div>
 
       {/* Comments Section */}
-      <div className="md:w-3/4">
+      <div className="md:w-1/4">
         <h4 className="text-2xl font-semibold">Comments</h4>
 
         {/* Comment Form */}
@@ -149,10 +149,9 @@ export default function SeeBlog() {
           <ul className="mt-6 space-y-4">
             {comments.map((comment) => (
               <li key={comment._id} className="p-4 bg-rose-100 rounded-lg mb-4">
-                <div className="text-sm"> 
-                  <p className="font-bold mb-2">From: {comment.email}</p>
-                <p className="font-semibold mb-2">Name: {comment.name}</p>
-                <p className="text-gray-700 mb-2">Comment: {comment.comment}</p>
+                <div className="text-sm">
+                <p className="font-semibold mb-2">From: {comment.name}</p>
+                <p className="text-gray-700 mb-2">{comment.comment}</p>
                 <p className="text-sm text-gray-500">{new Date(comment.createdAt).toLocaleString()}</p>
                 </div>
 

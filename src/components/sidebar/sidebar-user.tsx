@@ -17,7 +17,7 @@ function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
                     </div>
                 </div>
                 <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
+                <li><a href="/blogs">Blogs</a></li>
             </ul>
         </aside>
     );

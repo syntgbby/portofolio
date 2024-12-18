@@ -28,7 +28,7 @@ export default function Home() {
               <br /> Portfolio
             </h1>
             {/* Button to About Me */}
-            <Link href="/about">
+            <Link href="/about-me">
               <Button className="mt-3 px-6 py-1 dark:bg-rose-400 dark:hover:bg-rose-500">
                 About Me
               </Button>

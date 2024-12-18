@@ -198,11 +198,8 @@ export default function AdminBlogs() {
 
       <div className="pt-20 mt-20">
         <Toaster />
-        <div className="flex px-4 my-2 justify-center">
-          <div className="md:w-4/4 md:p-2 md:mb-0 mb-5 pt-2">
-            <div className="flex">
+        <div className="px-4 my-2">
               <h3 className="flex-1 text-2xl py-2 text-center">List Blogs</h3>
-            </div>
             <div>
               <button
                 onClick={onAddNew}
@@ -211,7 +208,8 @@ export default function AdminBlogs() {
                 Add New
               </button>
             </div>
-            <table className="min-w-full bg-white border border-gray-300">
+            <div className="overflow-x-auto">
+            <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-rose-200">
                   <th className="py-2 px-4 border-b">No</th>
@@ -247,8 +245,8 @@ export default function AdminBlogs() {
                           __html: truncateContent(item.content), // Display truncated content
                         }}
                       ></td>
-                      <td className="py-2 px-4 border-b text-center">
-                        <div className="inline-flex gap-2 text-[12px]">
+                      <td className="py-2 px-4 border text-center">
+                        <div className="flex justify-center gap-2">
                           <button
                             onClick={() => onViewHandler(item._id)}
                             className="bg-blue-300 hover:bg-blue-400 text-gray-800 py-2 px-4 rounded-md"
@@ -273,16 +271,12 @@ export default function AdminBlogs() {
                   ))}
               </tbody>
             </table>
-          </div>
+            </div>
         </div>
-        <div className="flex px-4 my-2 justify-center w-full">
-          <div className="md:w-4/4 md:p-2 md:mb-0 mb-5 pt-2">
-            <div className="flex mb-5">
+        <div className="px-4 my-2">
               <h3 className="flex-1 text-2xl py-2 text-center">List Comments</h3>
-            </div>
-            <div>
-            </div>
-            <table className="w-full bg-white border border-gray-300">
+              <div className="overflow-x-auto">
+            <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-rose-200">
                   <th className="py-2 px-4 border-b">No</th>
@@ -312,8 +306,8 @@ export default function AdminBlogs() {
                         <td className="py-2 px-4 border-b text-sm">
                           {comment.comment}
                         </td>
-                        <td className="py-2 px-4 border-b text-center">
-                          <div className="inline-flex gap-2 text-[12px]">
+                        <td className="py-2 px-4 border text-center">
+                          <div className="flex justify-center gap-2">
                             <button
                             onClick={() => onViewHandler(item._id)}
                             className="bg-blue-300 hover:bg-blue-400 text-gray-800 py-2 px-4 rounded-md"
@@ -339,6 +333,7 @@ export default function AdminBlogs() {
                   })}
               </tbody>
             </table>
+            </div>
 
             {replyComment && (
               <div className="md:w-4/4 md:p-2 md:mb-0 mb-5 pt-2">
@@ -357,7 +352,6 @@ export default function AdminBlogs() {
                 </form>
               </div>
             )}
-          </div>
         </div>
       </div>
     </>
